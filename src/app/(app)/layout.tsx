@@ -1,6 +1,8 @@
 "use client";
 
 import { useAuth } from "@/components/providers/auth-provider";
+import { AppSidebar } from "@/components/shared/app-sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 
@@ -24,7 +26,12 @@ const AppLayout = ({ children }: Props) => {
     return null;
   }
 
-  return <main className="flex w-full min-h-screen">{children}</main>;
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <main>{children}</main>
+    </SidebarProvider>
+  );
 };
 
 export default AppLayout;
