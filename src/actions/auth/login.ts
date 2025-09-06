@@ -6,6 +6,7 @@ import { Account } from "@/types";
 import { cookies } from "next/headers";
 
 export const login = async ({ data }: { data: LoginDTO }) => {
+  console.log(data);
   try {
     const fetchResponse = await fetch(constructEndpoint("auth/admin/login"), {
       method: "POST",
