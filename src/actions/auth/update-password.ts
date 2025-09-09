@@ -1,19 +1,25 @@
 "use server";
 
-import { LoginDTO } from "@/dto";
+import { UpdatePasswordDTO } from "@/dto";
 import { constructEndpoint } from "@/lib/api";
 import { Account } from "@/types";
 import { cookies } from "next/headers";
 
-export const login = async ({ data }: { data: LoginDTO }) => {
+export const updatePassword = async ({ data }: { data: UpdatePasswordDTO }) => {
   try {
-    const fetchResponse = await fetch(constructEndpoint("auth/admin/login"), {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const fetchResponse = await fetch(
+      constructEndpoint("auth/admin/update-password"),
+      {
+        method: "PATCH",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${
+            (await cookies()).get("AUTH_TOKEN")?.value || ""
+          }`,
+        },
+      }
+    );
     const response = await fetchResponse.json();
     if (!fetchResponse.ok) {
       return {
@@ -23,10 +29,8 @@ export const login = async ({ data }: { data: LoginDTO }) => {
       };
     }
 
-    (await cookies()).set("AUTH_TOKEN", response.data.authToken);
-
     return {
-      data: response.data.admin as Account,
+      data: response.data as Account,
       error: null,
       errorFields: null,
     };

@@ -12,18 +12,31 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { LogOut, UsersRound } from "lucide-react";
+import { LogOut, UserRoundSearch, UsersRound } from "lucide-react";
 import { useAuth } from "../providers/auth-provider";
 import { ROLE_MAP } from "../constants";
 import { Role } from "@/types";
 import { Button } from "../ui/button";
 import { logout } from "@/actions/auth/logout";
 
-const items = [
+const groups = [
   {
-    title: "Manajemen Akun",
-    url: "#",
-    icon: UsersRound,
+    title: "Akun",
+    accesses: ["superadmin", "admin"],
+    items: [
+      {
+        title: "Manajemen Admin",
+        url: "/account/admin",
+        icon: UsersRound,
+        accesses: ["superadmin"],
+      },
+      {
+        title: "Manajemen User",
+        url: "/account/user",
+        icon: UserRoundSearch,
+        accesses: ["superadmin", "admin"],
+      },
+    ],
   },
 ];
 
@@ -37,21 +50,37 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Master Data</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+          {groups.map((group, i) => {
+            if (group.accesses.includes(account?.role as string)) {
+              return (
+                <div key={`#group-${i}`}>
+                  <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
+                  <SidebarGroupContent>
+                    <SidebarMenu>
+                      {group.items.map((item, j) => {
+                        if (item.accesses.includes(account?.role as string)) {
+                          return (
+                            <SidebarMenuItem key={`#group-${i}-item-${j}`}>
+                              <SidebarMenuButton asChild>
+                                <a href={item.url}>
+                                  <item.icon />
+                                  <span>{item.title}</span>
+                                </a>
+                              </SidebarMenuButton>
+                            </SidebarMenuItem>
+                          );
+                        }
+
+                        return null;
+                      })}
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </div>
+              );
+            }
+
+            return null;
+          })}
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
@@ -65,7 +94,7 @@ export function AppSidebar() {
             </p>
           </div>
           <Button
-            className="h-10"
+            className="size-9"
             onClick={async () => {
               await logout();
             }}

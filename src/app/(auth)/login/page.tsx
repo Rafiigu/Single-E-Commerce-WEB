@@ -21,7 +21,11 @@ const LoginPage = () => {
       <form
         className="flex flex-col gap-y-5 p-5 rounded-lg bg-white shadow-md w-80"
         action={async () => {
-          const { error, errorFields } = await login({
+          const {
+            data: account,
+            error,
+            errorFields,
+          } = await login({
             data: formState,
           });
 
@@ -30,14 +34,22 @@ const LoginPage = () => {
           } else if (error !== null) {
             toast.error(error);
           } else {
-            toast.success("Login successful!");
-            router.replace("/");
+            toast.success("Login berhasil!");
+            if (account && !account.isPasswordChanged) {
+              router.replace("/update-password");
+            } else {
+              router.replace("/");
+            }
           }
         }}
       >
+        <h2 className="text-lg text-center font-medium text-neutral-900">
+          E-Commerce Admin
+        </h2>
         <Input
           name="email"
           placeholder="Input email"
+          value={formState.email}
           onChange={(e) =>
             setFormState((st) => ({
               ...st,
@@ -49,6 +61,7 @@ const LoginPage = () => {
         <PasswordInput
           name="password"
           placeholder="Input password"
+          value={formState.password}
           onChange={(e) =>
             setFormState((st) => ({
               ...st,
@@ -57,7 +70,9 @@ const LoginPage = () => {
           }
           errorMessage={errorFields.password}
         />
-        <Button type="submit">Login</Button>
+        <Button className="mt-2" type="submit">
+          Login
+        </Button>
       </form>
     </div>
   );
