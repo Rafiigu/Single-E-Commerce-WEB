@@ -2,6 +2,7 @@
 
 import { AppSidebar } from "@/components/shared/app-sidebar";
 import { RedirectIfNotAuthenticated } from "@/components/shared/redirect-if-not-authenticated";
+import { RedirectIfPasswordUnchanged } from "@/components/shared/redirect-if-password-unchanged";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { ReactNode } from "react";
 
@@ -12,10 +13,12 @@ type Props = {
 const AppLayout = ({ children }: Props) => {
   return (
     <RedirectIfNotAuthenticated>
-      <SidebarProvider>
-        <AppSidebar />
-        <main>{children}</main>
-      </SidebarProvider>
+      <RedirectIfPasswordUnchanged>
+        <SidebarProvider>
+          <AppSidebar />
+          <main>{children}</main>
+        </SidebarProvider>
+      </RedirectIfPasswordUnchanged>
     </RedirectIfNotAuthenticated>
   );
 };
