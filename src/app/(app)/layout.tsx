@@ -16,7 +16,7 @@ const AppLayout = ({ children }: Props) => {
       <RedirectIfPasswordUnchanged>
         <SidebarProvider>
           <AppSidebar />
-          <main>{children}</main>
+          <main className="w-full">{children}</main>
         </SidebarProvider>
       </RedirectIfPasswordUnchanged>
     </RedirectIfNotAuthenticated>
