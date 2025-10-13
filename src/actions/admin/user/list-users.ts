@@ -2,7 +2,7 @@
 
 import { constructEndpoint } from "@/lib/api";
 import { cookies } from "next/headers";
-import { Account } from "@/types";
+import { User } from "@/types";
 
 export const listUsers = async () => {
   try {
@@ -17,19 +17,19 @@ export const listUsers = async () => {
     const response = await fetchResponse.json();
     if (!fetchResponse.ok) {
       return {
-        data: [] as Account[],
+        data: [] as User[],
         error: response.error.message || null,
       };
     }
 
     return {
-      data: response.data as Account[],
+      data: response.data as User[],
       error: null,
       errorFields: null,
     };
   } catch (error) {
     return {
-      data: [] as Account[],
+      data: [] as User[],
       error: (error as Error).message || null,
     };
   }

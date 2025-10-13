@@ -3,7 +3,7 @@ import { Table } from "@/components/shared/table";
 import { Badge, BadgeVariants } from "@/components/ui/badge";
 
 const UserAccountsPage = async () => {
-  const { data: accounts, error } = await listUsers();
+  const { data: users, error } = await listUsers();
 
   if (error) {
     throw new Error(error);
@@ -12,11 +12,12 @@ const UserAccountsPage = async () => {
   return (
     <div className="flex w-full flex-col items-center justify-center p-2">
       <Table
-        data={accounts}
+        data={users}
         headers={{
           name: "Nama Lengkap",
           email: "Email",
           status: "Status",
+          balance: "Saldo",
         }}
         render={{
           name(val) {
@@ -28,13 +29,24 @@ const UserAccountsPage = async () => {
               "not-verified": "default",
             };
 
-            return <Badge variant={variantMap[val]}>{val}</Badge>;
+            const valueMap: Record<string, string> = {
+              verified: "Terverifikasi",
+              "not-verified": "Belum Terverifikasi",
+            };
+
+            console.log(valueMap);
+
+            return <Badge variant={variantMap[val]}>{valueMap[val]}</Badge>;
+          },
+          balance(val) {
+            return <span className="text-neutral-900">Rp {val}</span>;
           },
         }}
         minWidths={{
           name: "min-w-[180px] w-[180px]",
           email: "min-w[180px] w-full",
-          status: "min-w-[120px] w-[120px]",
+          balance: "min-w-[120px] w-[120px]",
+          status: "min-w-[150px] w-[150px]",
         }}
       />
     </div>

@@ -9,3 +9,14 @@ export type Account = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type User = {
+  status: string;
+  email: string;
+  name: string;
+  id: string;
+  profile: string;
+  balance: number;
+  createdAt: Date;
+  updatedAt: Date;
+};
