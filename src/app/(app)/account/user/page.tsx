@@ -1,9 +1,9 @@
-import { listAdmins } from "@/actions/admin/list-admins";
+import { listUsers } from "@/actions/admin/user/list-users";
 import { Table } from "@/components/shared/table";
 import { Badge, BadgeVariants } from "@/components/ui/badge";
 
-const AdminAccountsPage = async () => {
-  const { data: accounts, error } = await listAdmins();
+const UserAccountsPage = async () => {
+  const { data: accounts, error } = await listUsers();
 
   if (error) {
     throw new Error(error);
@@ -15,7 +15,6 @@ const AdminAccountsPage = async () => {
         data={accounts}
         headers={{
           name: "Nama Lengkap",
-          role: "Role",
           email: "Email",
           status: "Status",
         }}
@@ -23,19 +22,10 @@ const AdminAccountsPage = async () => {
           name(val) {
             return <span className="text-neutral-900">{val}</span>;
           },
-          role(val) {
-            const map = {
-              superadmin: "Super Admin",
-              admin: "Admin",
-              staff: "Staff",
-            };
-
-            return <span>{map[val]}</span>;
-          },
           status(val) {
             const variantMap: Record<string, BadgeVariants> = {
-              active: "success",
-              inactive: "danger",
+              verified: "success",
+              "not-verified": "default",
             };
 
             return <Badge variant={variantMap[val]}>{val}</Badge>;
@@ -43,7 +33,6 @@ const AdminAccountsPage = async () => {
         }}
         minWidths={{
           name: "min-w-[180px] w-[180px]",
-          role: "min-w-[120px] w-[120px]",
           email: "min-w[180px] w-full",
           status: "min-w-[120px] w-[120px]",
         }}
@@ -52,4 +41,4 @@ const AdminAccountsPage = async () => {
   );
 };
 
-export default AdminAccountsPage;
+export default UserAccountsPage;
