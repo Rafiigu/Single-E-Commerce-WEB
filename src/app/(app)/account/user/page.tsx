@@ -1,9 +1,25 @@
 import { listUsers } from "@/actions/admin/user/list-users";
+import { PaginationControls } from "@/components/shared/pagination-controls";
 import { Table } from "@/components/shared/table";
 import { Badge, BadgeVariants } from "@/components/ui/badge";
+import { formatRupiah } from "@/utils/format-rupiah";
 
-const UserAccountsPage = async () => {
-  const { data: users, error } = await listUsers();
+type Props = {
+  searchParams: Promise<{
+    page?: string;
+  }>;
+};
+
+const UserAccountsPage = async ({ searchParams: rawSearchParams }: Props) => {
+  const searchParams = await rawSearchParams;
+  const page = Math.max(parseInt(searchParams.page || "1"), 1);
+  const {
+    data: users,
+    total,
+    error,
+  } = await listUsers({
+    page,
+  });
 
   if (error) {
     throw new Error(error);
@@ -34,12 +50,12 @@ const UserAccountsPage = async () => {
               "not-verified": "Belum Terverifikasi",
             };
 
-            console.log(valueMap);
-
             return <Badge variant={variantMap[val]}>{valueMap[val]}</Badge>;
           },
           balance(val) {
-            return <span className="text-neutral-900">Rp {val}</span>;
+            return (
+              <span className="text-neutral-900">{formatRupiah(val)}</span>
+            );
           },
         }}
         minWidths={{
@@ -49,6 +65,7 @@ const UserAccountsPage = async () => {
           status: "min-w-[150px] w-[150px]",
         }}
       />
+      <PaginationControls page={page} total={total} />
     </div>
   );
 };

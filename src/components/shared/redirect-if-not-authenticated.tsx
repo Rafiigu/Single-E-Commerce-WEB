@@ -12,7 +12,6 @@ export const RedirectIfNotAuthenticated = ({ children }: Props) => {
   const router = useRouter();
 
   const { account } = useAuth();
-  console.log(account);
 
   useEffect(() => {
     if (!account) {

@@ -18,18 +18,21 @@ export const listAdmins = async () => {
     if (!fetchResponse.ok) {
       return {
         data: [] as Account[],
+        total: 0,
         error: response.error.message || null,
       };
     }
 
     return {
       data: response.data as Account[],
+      total: response.total,
       error: null,
       errorFields: null,
     };
   } catch (error) {
     return {
       data: [] as Account[],
+      total: 0,
       error: (error as Error).message || null,
     };
   }
