@@ -1,5 +1,4 @@
-import { listUsers } from "@/actions/admin/user/list-users";
-import { PaginationControls } from "@/components/shared/pagination-controls";
+import { listUsers } from "@/actions/accounts/user/list-users";
 import { Table } from "@/components/shared/table";
 import { Badge, BadgeVariants } from "@/components/ui/badge";
 import { formatRupiah } from "@/utils/format-rupiah";
@@ -20,15 +19,16 @@ const UserAccountsPage = async ({ searchParams: rawSearchParams }: Props) => {
   } = await listUsers({
     page,
   });
-
   if (error) {
     throw new Error(error);
   }
 
   return (
-    <div className="flex w-full flex-col items-center justify-center p-2">
+    <div className="flex w-full flex-col items-center justify-center p-4">
       <Table
         data={users}
+        total={total}
+        page={page}
         headers={{
           name: "Nama Lengkap",
           email: "Email",
@@ -65,7 +65,6 @@ const UserAccountsPage = async ({ searchParams: rawSearchParams }: Props) => {
           status: "min-w-[150px] w-[150px]",
         }}
       />
-      <PaginationControls page={page} total={total} />
     </div>
   );
 };

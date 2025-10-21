@@ -4,16 +4,37 @@ import { constructEndpoint } from "@/lib/api";
 import { cookies } from "next/headers";
 import { Account } from "@/types";
 
-export const listAdmins = async () => {
+export const listAdmins = async ({
+  mode = "pagination",
+  page,
+  size = 20,
+  search,
+  status = "all",
+}: {
+  mode?: "all" | "pagination";
+  page: number;
+  size?: number;
+  search?: string;
+  status?: string;
+}) => {
   try {
-    const fetchResponse = await fetch(constructEndpoint("admin"), {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${
-          (await cookies()).get("AUTH_TOKEN")?.value || ""
-        }`,
-      },
-    });
+    const fetchResponse = await fetch(
+      constructEndpoint("admin", {
+        mode,
+        page,
+        size,
+        search,
+        status,
+      }),
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${
+            (await cookies()).get("AUTH_TOKEN")?.value || ""
+          }`,
+        },
+      }
+    );
     const response = await fetchResponse.json();
     if (!fetchResponse.ok) {
       return {

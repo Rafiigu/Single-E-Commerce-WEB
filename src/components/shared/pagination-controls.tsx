@@ -1,6 +1,8 @@
 "use client";
 
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
 
 const getRelativePath = (url: URL) => {
   return `${url.pathname}${url.search}`;
@@ -30,22 +32,22 @@ export const PaginationControls = ({ page, total }: Props) => {
   };
 
   return (
-    <div className="flex items-center gap-x-3 text-sm mt-4">
-      <button
-        className="text-neutral-700 disabled:text-neutral-400"
+    <div className="w-full flex items-center justify-end gap-x-3 text-sm mt-4">
+      <Button
+        className="size-9"
         disabled={page === firstPage}
         onClick={gotoPrevPage}
       >
-        Prev
-      </button>
-      <p>{page}</p>
-      <button
-        className="text-neutral-700 disabled:text-neutral-400"
+        <ChevronLeft className="text-white" />
+      </Button>
+      <p className="text-neutral-700 font-medium">{page}</p>
+      <Button
+        className="size-9"
         disabled={page === lastPage}
         onClick={gotoNextPage}
       >
-        Next
-      </button>
+        <ChevronRight className="text-white" />
+      </Button>
     </div>
   );
 };

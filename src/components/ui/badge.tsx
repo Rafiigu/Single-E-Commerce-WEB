@@ -23,7 +23,12 @@ const map: Record<BadgeVariants, string> = {
 
 export const Badge = ({ variant = "default", children }: Props) => {
   return (
-    <div className={cn("text-xs px-1.5 py-0.5 rounded-sm w-fit", map[variant])}>
+    <div
+      className={cn(
+        "text-[0.675rem] font-medium px-1.5 py-0.5 rounded-sm w-fit",
+        map[variant]
+      )}
+    >
       {children}
     </div>
   );
