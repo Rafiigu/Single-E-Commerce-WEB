@@ -14,7 +14,7 @@ type Props = {
   };
 };
 
-export const AdminFilterForm = ({ appliedFilters }: Props) => {
+export const UserFilterForm = ({ appliedFilters }: Props) => {
   const router = useRouter();
   const [filter, setFilter] = useState({
     search: appliedFilters.search || "",
@@ -31,7 +31,7 @@ export const AdminFilterForm = ({ appliedFilters }: Props) => {
           searchParams.set(key, value);
         });
 
-        router.push(`/account/admin?${searchParams.toString()}`);
+        router.push(`/account/user?${searchParams.toString()}`);
       }}
     >
       <Input
@@ -47,7 +47,7 @@ export const AdminFilterForm = ({ appliedFilters }: Props) => {
         }}
       />
       <StatusSelect
-        role="admin"
+        role="user"
         onValueChange={(v) => {
           setFilter((st) => ({
             ...st,

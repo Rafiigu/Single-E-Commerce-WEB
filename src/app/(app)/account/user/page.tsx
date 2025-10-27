@@ -1,4 +1,5 @@
 import { listUsers } from "@/actions/accounts/user/list-users";
+import { UserFilterForm } from "@/components/accounts/user/filter-form";
 import { Table } from "@/components/shared/table";
 import { Badge, BadgeVariants } from "@/components/ui/badge";
 import { formatRupiah } from "@/utils/format-rupiah";
@@ -6,6 +7,8 @@ import { formatRupiah } from "@/utils/format-rupiah";
 type Props = {
   searchParams: Promise<{
     page?: string;
+    search?: string;
+    status?: string;
   }>;
 };
 
@@ -18,6 +21,8 @@ const UserAccountsPage = async ({ searchParams: rawSearchParams }: Props) => {
     error,
   } = await listUsers({
     page,
+    search: searchParams.search,
+    status: searchParams.status,
   });
   if (error) {
     throw new Error(error);
@@ -25,6 +30,7 @@ const UserAccountsPage = async ({ searchParams: rawSearchParams }: Props) => {
 
   return (
     <div className="flex w-full flex-col items-center justify-center p-4">
+      <UserFilterForm appliedFilters={searchParams} />
       <Table
         data={users}
         total={total}
