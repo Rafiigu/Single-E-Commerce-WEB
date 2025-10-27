@@ -53,7 +53,7 @@ export const UserFilterForm = ({ appliedFilters }: Props) => {
         }}
       />
       <Select>
-        <SelectTrigger className="w-48">
+        <SelectTrigger label="Status" className="w-48">
           <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent>
