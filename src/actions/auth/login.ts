@@ -2,7 +2,7 @@
 
 import { LoginDTO } from "@/dto";
 import { constructEndpoint } from "@/lib/api";
-import { Account } from "@/types";
+import { AdminAccount } from "@/types";
 import { cookies } from "next/headers";
 
 export const login = async ({ data }: { data: LoginDTO }) => {
@@ -26,7 +26,7 @@ export const login = async ({ data }: { data: LoginDTO }) => {
     (await cookies()).set("AUTH_TOKEN", response.data.authToken);
 
     return {
-      data: response.data.admin as Account,
+      data: response.data.admin as AdminAccount,
       error: null,
       errorFields: null,
     };

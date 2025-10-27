@@ -2,7 +2,7 @@
 
 import { constructEndpoint } from "@/lib/api";
 import { cookies } from "next/headers";
-import { User } from "@/types";
+import { UserAccount } from "@/types";
 
 export const listUsers = async ({
   mode = "pagination",
@@ -38,21 +38,21 @@ export const listUsers = async ({
     const response = await fetchResponse.json();
     if (!fetchResponse.ok) {
       return {
-        data: [] as User[],
+        data: [] as UserAccount[],
         total: 0,
         error: response.error.message || null,
       };
     }
 
     return {
-      data: response.data as User[],
+      data: response.data as UserAccount[],
       total: response.total,
       error: null,
       errorFields: null,
     };
   } catch (error) {
     return {
-      data: [] as User[],
+      data: [] as UserAccount[],
       total: 0,
       error: (error as Error).message || null,
     };

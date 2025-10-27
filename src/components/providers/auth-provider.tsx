@@ -1,10 +1,10 @@
 "use client";
 
-import { Account } from "@/types";
+import { AdminAccount } from "@/types";
 import { createContext, ReactNode, useContext } from "react";
 
 type AuthContextType = {
-  account: Account | null;
+  account: AdminAccount | null;
 };
 
 const AuthContext = createContext<AuthContextType>({
@@ -15,7 +15,7 @@ export const AuthProvider = ({
   account,
   children,
 }: {
-  account: Account | null;
+  account: AdminAccount | null;
   children: ReactNode;
 }) => {
   return (

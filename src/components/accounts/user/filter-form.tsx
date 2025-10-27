@@ -1,8 +1,14 @@
 "use client";
 
-import { StatusSelect } from "@/components/shared/select/status";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { SearchIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -46,15 +52,16 @@ export const UserFilterForm = ({ appliedFilters }: Props) => {
           }));
         }}
       />
-      <StatusSelect
-        role="user"
-        onValueChange={(v) => {
-          setFilter((st) => ({
-            ...st,
-            status: v || "all",
-          }));
-        }}
-      />
+      <Select>
+        <SelectTrigger className="w-48">
+          <SelectValue placeholder="Status" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">Semua</SelectItem>
+          <SelectItem value="verified">Terverifikasi</SelectItem>
+          <SelectItem value="not-verified">Belum Terverifikasi</SelectItem>
+        </SelectContent>
+      </Select>
       <Button className="size-9">
         <SearchIcon />
       </Button>

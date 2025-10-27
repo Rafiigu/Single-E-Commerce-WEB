@@ -2,7 +2,7 @@
 
 import { constructEndpoint } from "@/lib/api";
 import { cookies } from "next/headers";
-import { Account } from "@/types";
+import { AdminAccount } from "@/types";
 
 export const listAdmins = async ({
   mode = "pagination",
@@ -38,21 +38,21 @@ export const listAdmins = async ({
     const response = await fetchResponse.json();
     if (!fetchResponse.ok) {
       return {
-        data: [] as Account[],
+        data: [] as AdminAccount[],
         total: 0,
         error: response.error.message || null,
       };
     }
 
     return {
-      data: response.data as Account[],
+      data: response.data as AdminAccount[],
       total: response.total,
       error: null,
       errorFields: null,
     };
   } catch (error) {
     return {
-      data: [] as Account[],
+      data: [] as AdminAccount[],
       total: 0,
       error: (error as Error).message || null,
     };

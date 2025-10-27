@@ -2,7 +2,7 @@
 
 import { constructEndpoint } from "@/lib/api";
 import { cookies } from "next/headers";
-import { Account } from "@/types";
+import { AdminAccount } from "@/types";
 
 export const getAuthenticatedAccount = async () => {
   try {
@@ -23,7 +23,7 @@ export const getAuthenticatedAccount = async () => {
     }
 
     return {
-      data: response.data as Account,
+      data: response.data as AdminAccount,
       error: null,
       errorFields: null,
     };

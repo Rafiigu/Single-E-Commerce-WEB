@@ -1,5 +1,6 @@
 export type Role = "superadmin" | "admin" | "staff";
-export type Account = {
+
+export type AdminAccount = {
   email: string;
   status: string;
   id: string;
@@ -10,7 +11,7 @@ export type Account = {
   updatedAt: Date;
 };
 
-export type User = {
+export type UserAccount = {
   status: string;
   email: string;
   name: string;

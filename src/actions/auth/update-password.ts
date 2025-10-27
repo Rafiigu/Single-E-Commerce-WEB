@@ -2,7 +2,7 @@
 
 import { UpdatePasswordDTO } from "@/dto";
 import { constructEndpoint } from "@/lib/api";
-import { Account } from "@/types";
+import { AdminAccount } from "@/types";
 import { cookies } from "next/headers";
 
 export const updatePassword = async ({ data }: { data: UpdatePasswordDTO }) => {
@@ -30,7 +30,7 @@ export const updatePassword = async ({ data }: { data: UpdatePasswordDTO }) => {
     }
 
     return {
-      data: response.data as Account,
+      data: response.data as AdminAccount,
       error: null,
       errorFields: null,
     };

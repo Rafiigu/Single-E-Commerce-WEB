@@ -1,8 +1,6 @@
 import { listUsers } from "@/actions/accounts/user/list-users";
 import { UserFilterForm } from "@/components/accounts/user/filter-form";
-import { Table } from "@/components/shared/table";
-import { Badge, BadgeVariants } from "@/components/ui/badge";
-import { formatRupiah } from "@/utils/format-rupiah";
+import { UserAccountTable } from "@/components/accounts/user/table";
 
 type Props = {
   searchParams: Promise<{
@@ -29,48 +27,9 @@ const UserAccountsPage = async ({ searchParams: rawSearchParams }: Props) => {
   }
 
   return (
-    <div className="flex w-full flex-col items-center justify-center p-4">
+    <div className="flex w-full flex-col items-center justify-center p-4 gap-y-4">
       <UserFilterForm appliedFilters={searchParams} />
-      <Table
-        data={users}
-        total={total}
-        page={page}
-        headers={{
-          name: "Nama Lengkap",
-          email: "Email",
-          status: "Status",
-          balance: "Saldo",
-        }}
-        render={{
-          name(val) {
-            return <span className="text-neutral-900">{val}</span>;
-          },
-          status(val) {
-            const variantMap: Record<string, BadgeVariants> = {
-              verified: "success",
-              "not-verified": "default",
-            };
-
-            const valueMap: Record<string, string> = {
-              verified: "Terverifikasi",
-              "not-verified": "Belum Terverifikasi",
-            };
-
-            return <Badge variant={variantMap[val]}>{valueMap[val]}</Badge>;
-          },
-          balance(val) {
-            return (
-              <span className="text-neutral-900">{formatRupiah(val)}</span>
-            );
-          },
-        }}
-        minWidths={{
-          name: "min-w-[180px] w-[180px]",
-          email: "min-w[180px] w-full",
-          balance: "min-w-[120px] w-[120px]",
-          status: "min-w-[150px] w-[150px]",
-        }}
-      />
+      <UserAccountTable users={users} page={page} total={total} />
     </div>
   );
 };
