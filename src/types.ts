@@ -1,11 +1,10 @@
-export type Role = "superadmin" | "admin" | "staff";
-
+export type AdminRole = "superadmin" | "admin" | "staff";
 export type AdminAccount = {
   email: string;
   status: string;
   id: string;
   name: string;
-  role: Role;
+  role: AdminRole;
   isPasswordChanged: boolean;
   createdAt: Date;
   updatedAt: Date;

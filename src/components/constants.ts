@@ -1,6 +1,6 @@
-import { Role } from "@/types";
+import { AdminRole } from "@/types";
 
-export const ROLE_MAP: Record<Role, string> = {
+export const ROLE_MAP: Record<AdminRole, string> = {
   admin: "Admin",
   superadmin: "Superadmin",
   staff: "Staff",

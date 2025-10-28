@@ -15,7 +15,7 @@ import {
 import { LogOut, UserRoundSearch, UsersRound } from "lucide-react";
 import { useAuth } from "../providers/auth-provider";
 import { ROLE_MAP } from "../constants";
-import { Role } from "@/types";
+import { AdminRole } from "@/types";
 import { Button } from "../ui/button";
 import { logout } from "@/actions/auth/logout";
 
@@ -90,7 +90,7 @@ export function AppSidebar() {
               {account?.name}
             </p>
             <p className="text-xs text-neutral-500">
-              {ROLE_MAP[account?.role as Role]}
+              {ROLE_MAP[account?.role as AdminRole]}
             </p>
           </div>
           <Button
