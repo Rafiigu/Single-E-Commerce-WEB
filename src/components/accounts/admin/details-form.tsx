@@ -51,6 +51,7 @@ export const AdminAccountDetailsForm = ({
         <Input
           name="name"
           placeholder="Input nama"
+          value={formState.name}
           onChange={(e) => {
             setFormState((st) => ({
               ...st,
@@ -67,6 +68,7 @@ export const AdminAccountDetailsForm = ({
         <Input
           name="email"
           placeholder="Input email"
+          value={formState.email}
           onChange={(e) => {
             setFormState((st) => ({
               ...st,
@@ -82,6 +84,7 @@ export const AdminAccountDetailsForm = ({
       >
         <Select
           name="role"
+          value={formState.role}
           onValueChange={(v) => {
             setFormState((st) => ({
               ...st,
@@ -98,7 +101,9 @@ export const AdminAccountDetailsForm = ({
           </SelectContent>
         </Select>
       </FormHint>
-      <Button type="submit">Submit</Button>
+      <Button className="w-fit ml-auto" type="submit">
+        Submit
+      </Button>
     </form>
   );
 };

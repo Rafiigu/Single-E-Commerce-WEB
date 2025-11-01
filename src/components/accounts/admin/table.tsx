@@ -1,6 +1,16 @@
+"use client";
+
 import { Table } from "@/components/shared/table";
 import { Badge, BadgeVariants } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { AdminAccount } from "@/types";
+import { EllipsisVerticalIcon } from "lucide-react";
+import Link from "next/link";
 
 type Props = {
   accounts: AdminAccount[];
@@ -52,6 +62,27 @@ export const AdminAccountTable = ({ accounts, page, total }: Props) => {
         role: "min-w-[120px] w-[120px]",
         email: "min-w[180px] w-full",
         status: "min-w-[120px] w-[120px]",
+      }}
+      renderActionColumn={(row) => {
+        return (
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button className="size-8" variant="outline">
+                <EllipsisVerticalIcon />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent align="end" className="w-44 p-2">
+              <Link href={`/account/admin/${row.id}/edit`}>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-neutral-700 px-3"
+                >
+                  Edit
+                </Button>
+              </Link>
+            </PopoverContent>
+          </Popover>
+        );
       }}
     />
   );

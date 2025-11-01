@@ -29,7 +29,7 @@ export const AdminFilterForm = ({ appliedFilters }: Props) => {
 
   return (
     <form
-      className="flex w-full flex-row justify-start items-center gap-x-4"
+      className="flex flex-row justify-start items-center gap-x-4"
       action={() => {
         const searchParams = new URLSearchParams();
 

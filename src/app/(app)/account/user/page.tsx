@@ -28,7 +28,9 @@ const UserAccountsPage = async ({ searchParams: rawSearchParams }: Props) => {
 
   return (
     <div className="flex w-full flex-col items-center justify-center p-4 gap-y-4">
-      <UserFilterForm appliedFilters={searchParams} />
+      <div className="flex w-full items-center">
+        <UserFilterForm appliedFilters={searchParams} />
+      </div>
       <UserAccountTable users={users} page={page} total={total} />
     </div>
   );

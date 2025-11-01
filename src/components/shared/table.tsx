@@ -11,6 +11,7 @@ type Props<T> = {
   render?: Partial<{
     [key in keyof T]: (val: T[key]) => ReactNode;
   }>;
+  renderActionColumn?: (row: T) => ReactNode;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -20,6 +21,7 @@ export function Table<T extends Record<string, any>>({
   total,
   headers,
   render = {},
+  renderActionColumn,
   minWidths,
 }: Props<T>) {
   return (
@@ -36,13 +38,19 @@ export function Table<T extends Record<string, any>>({
                   {
                     "rounded-tl-sm": i === 0,
                     "border-r rounded-tr-sm":
-                      i === Object.entries(headers).length - 1,
+                      i === Object.entries(headers).length - 1 &&
+                      !renderActionColumn,
                   }
                 )}
               >
                 {value as string}
               </th>
             ))}
+            {renderActionColumn ? (
+              <th className="text-neutral-900 border-y border-l text-left bg-amber-100 px-2.5 py-2 text-sm border-r rounded-tr-sm sticky right-0">
+                Action
+              </th>
+            ) : null}
           </tr>
         </thead>
         <tbody>
@@ -54,17 +62,32 @@ export function Table<T extends Record<string, any>>({
                   className={cn(
                     "border-b border-l px-2.5 py-1.5 text-sm text-neutral-500",
                     {
-                      "border-r": j === Object.entries(headers).length - 1,
+                      "border-r":
+                        j === Object.entries(headers).length - 1 &&
+                        !renderActionColumn,
                       "rounded-bl-sm": i === data.length - 1 && j === 0,
                       "rounded-br-sm":
                         i === data.length - 1 &&
-                        j === Object.entries(headers).length - 1,
+                        j === Object.entries(headers).length - 1 &&
+                        !renderActionColumn,
                     }
                   )}
                 >
                   {render[k] ? render[k](d[k]) : d[k] || "-"}
                 </td>
               ))}
+              {renderActionColumn ? (
+                <td
+                  className={cn(
+                    "border-b border-l border-r px-2.5 py-1.5 text-sm text-neutral-500",
+                    {
+                      "rounded-br-sm": i === data.length - 1,
+                    }
+                  )}
+                >
+                  {renderActionColumn(d)}
+                </td>
+              ) : null}
             </tr>
           ))}
         </tbody>
