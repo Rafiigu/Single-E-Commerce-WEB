@@ -13,3 +13,9 @@ export type MutateAdminDTO = {
   email: string;
   role: string;
 };
+
+export type MutateUserDTO = {
+  name: string;
+  email: string;
+  password: string;
+};

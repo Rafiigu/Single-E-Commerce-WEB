@@ -2,38 +2,31 @@
 
 import { FormHint } from "@/components/shared/form-hint";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { AdminAccount } from "@/types";
-import { Select } from "@radix-ui/react-select";
+import { Input, PasswordInput } from "@/components/ui/input";
+import { UserAccount } from "@/types";
 import { useState } from "react";
 
 type FormState = {
   name: string;
   email: string;
-  role: string;
+  password: string;
 };
 
 type Props = {
   errorFields?: Record<string, string>;
   action: (formState: FormState) => void;
-  adminAccount?: AdminAccount | null;
+  userAccount?: UserAccount | null;
 };
 
-export const AdminAccountDetailsForm = ({
+export const UserAccountDetailsForm = ({
   errorFields = {},
   action,
-  adminAccount,
+  userAccount,
 }: Props) => {
   const [formState, setFormState] = useState<FormState>({
-    name: adminAccount?.name || "",
-    email: adminAccount?.email || "",
-    role: adminAccount?.role || "",
+    name: userAccount?.name || "",
+    email: userAccount?.email || "",
+    password: userAccount?.password || "",
   });
 
   return (
@@ -45,7 +38,7 @@ export const AdminAccountDetailsForm = ({
     >
       <FormHint
         label="Nama Lengkap"
-        description="Nama lengkap dari admin."
+        description="Nama lengkap dari User"
         errorMessage={errorFields.name}
       >
         <Input
@@ -59,14 +52,15 @@ export const AdminAccountDetailsForm = ({
           }}
         />
       </FormHint>
+
       <FormHint
         label="Email"
-        description="Email dari admin."
+        description="Email dari user"
         errorMessage={errorFields.email}
       >
         <Input
           name="email"
-          placeholder="Input email"
+          placeholder="Input Email"
           onChange={(e) => {
             setFormState((st) => ({
               ...st,
@@ -75,28 +69,22 @@ export const AdminAccountDetailsForm = ({
           }}
         />
       </FormHint>
+
       <FormHint
-        label="Role"
-        description="Role dari admin."
-        errorMessage={errorFields.role}
+        label="Password"
+        description="Password dari User"
+        errorMessage={errorFields.password}
       >
-        <Select
-          name="role"
-          onValueChange={(v) => {
+        <PasswordInput
+          name="Password"
+          placeholder="Input Password"
+          onChange={(e) => {
             setFormState((st) => ({
               ...st,
-              role: v,
+              password: e.target.value,
             }));
           }}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Pilih role" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="admin">Admin</SelectItem>
-            <SelectItem value="staff">Staff</SelectItem>
-          </SelectContent>
-        </Select>
+        />
       </FormHint>
       <Button type="submit">Submit</Button>
     </form>
