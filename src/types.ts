@@ -14,7 +14,6 @@ export type UserAccount = {
   status: string;
   email: string;
   name: string;
-  password: string;
   id: string;
   profile: string;
   balance: number;
