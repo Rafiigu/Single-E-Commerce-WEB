@@ -12,7 +12,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { LogOut, UserRoundSearch, UsersRound } from "lucide-react";
+import {
+  Blocks,
+  CreditCard,
+  LogOut,
+  Package,
+  UserRoundSearch,
+  UsersRound,
+} from "lucide-react";
 import { useAuth } from "../providers/auth-provider";
 import { ROLE_MAP } from "../constants";
 import { AdminRole } from "@/types";
@@ -35,6 +42,36 @@ const groups = [
         url: "/account/user",
         icon: UserRoundSearch,
         accesses: ["superadmin", "admin"],
+      },
+    ],
+  },
+  {
+    title: "Produk",
+    accesses: ["superadmin", "admin"],
+    items: [
+      {
+        title: "Manajemen Kategori",
+        url: "/product-category",
+        icon: Blocks,
+        accesses: ["superadmin"],
+      },
+      {
+        title: "Manajemen Produk",
+        url: "/product",
+        icon: Package,
+        accesses: ["superadmin", "admin"],
+      },
+    ],
+  },
+  {
+    title: "Transaksi",
+    accesses: ["superadmin", "admin"],
+    items: [
+      {
+        title: "Manajemen Tipe Pembayaran",
+        url: "/payment-term",
+        icon: CreditCard,
+        accesses: ["superadmin"],
       },
     ],
   },
