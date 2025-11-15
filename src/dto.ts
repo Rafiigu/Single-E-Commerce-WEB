@@ -13,3 +13,11 @@ export type MutateAdminDTO = {
   email: string;
   role: string;
 };
+
+export type MutateCategoryDTO = {
+  name: string;
+};
+
+export type MutatePaymentTermDTO = {
+  name: string;
+};

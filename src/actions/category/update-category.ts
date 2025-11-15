@@ -1,16 +1,16 @@
 "use server";
 
-import { MutateAdminDTO } from "@/dto";
+import { MutateCategoryDTO } from "@/dto";
 import { constructEndpoint } from "@/lib/api";
-import { AdminAccount } from "@/types";
+import { ProductCategory } from "@/types";
 import { cookies } from "next/headers";
 
-export const updateAdmin = async (
-  { data }: { data: MutateAdminDTO },
+export const updateCategory = async (
+  { data }: { data: MutateCategoryDTO },
   id: string
 ) => {
   try {
-    const fetchResponse = await fetch(constructEndpoint(`admin/${id}`), {
+    const fetchResponse = await fetch(constructEndpoint(`category/${id}`), {
       method: "PUT",
       body: JSON.stringify(data),
       headers: {
@@ -30,7 +30,7 @@ export const updateAdmin = async (
     }
 
     return {
-      data: response.data as AdminAccount,
+      data: response.data as ProductCategory,
       error: null,
       errorFields: null,
     };

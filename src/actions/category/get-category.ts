@@ -1,18 +1,12 @@
 "use server";
 
-import { MutateAdminDTO } from "@/dto";
 import { constructEndpoint } from "@/lib/api";
-import { AdminAccount } from "@/types";
+import { ProductCategory } from "@/types";
 import { cookies } from "next/headers";
 
-export const updateAdmin = async (
-  { data }: { data: MutateAdminDTO },
-  id: string
-) => {
+export const getCategory = async ({ id }: { id: string }) => {
   try {
-    const fetchResponse = await fetch(constructEndpoint(`admin/${id}`), {
-      method: "PUT",
-      body: JSON.stringify(data),
+    const fetchResponse = await fetch(constructEndpoint(`category/${id}`), {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${
@@ -24,21 +18,22 @@ export const updateAdmin = async (
     if (!fetchResponse.ok) {
       return {
         data: null,
+        total: 0,
         error: response.error.message || null,
-        errorFields: response.error.fields || null,
       };
     }
 
     return {
-      data: response.data as AdminAccount,
+      data: response.data as ProductCategory,
+      total: response.total,
       error: null,
       errorFields: null,
     };
   } catch (error) {
     return {
       data: null,
+      total: 0,
       error: (error as Error).message || null,
-      errorFields: null,
     };
   }
 };

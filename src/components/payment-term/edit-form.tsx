@@ -1,37 +1,36 @@
 "use client";
 
-import { AdminAccountDetailsForm } from "./details-form";
-import { useState } from "react";
+import { PaymentTerm } from "@/types";
 import { useRouter } from "next/navigation";
-import { AdminAccount } from "@/types";
-import { updateAdmin } from "@/actions/accounts/admin/update-admin";
+import { useState } from "react";
+import { PaymentTermDetailsForm } from "./details-form";
+import { updatePaymentTerm } from "@/actions/payment-term/update-payment-term";
 
 type Props = {
-  adminAccount: AdminAccount;
+  paymentTerm: PaymentTerm;
 };
 
-export const AdminAccountEditForm = ({ adminAccount }: Props) => {
+export const PaymentTermEditForm = ({ paymentTerm }: Props) => {
   const router = useRouter();
   const [errorFields, setErrorFields] = useState<Record<string, string>>({});
 
   return (
-    <AdminAccountDetailsForm
-      adminAccount={adminAccount}
+    <PaymentTermDetailsForm
+      paymentTerm={paymentTerm}
       errorFields={errorFields}
       action={async (formState) => {
-        const { data, error, errorFields } = await updateAdmin(
+        const { data, error, errorFields } = await updatePaymentTerm(
           {
             data: formState,
           },
-          adminAccount.id
+          paymentTerm.id
         );
-
         if (errorFields !== null) {
           setErrorFields(errorFields);
         } else if (error) {
           alert(error);
         } else {
-          router.push("/account/admin");
+          router.push("/payment-term");
         }
       }}
     />

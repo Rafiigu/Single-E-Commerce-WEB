@@ -20,3 +20,19 @@ export type UserAccount = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type ProductCategory = {
+  id: string;
+  name: string;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type PaymentTerm = {
+  id: string;
+  name: string;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date
+}

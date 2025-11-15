@@ -1,17 +1,18 @@
 "use server";
 
-import { MutateAdminDTO } from "@/dto";
+import { MutatePaymentTermDTO } from "@/dto";
 import { constructEndpoint } from "@/lib/api";
-import { AdminAccount } from "@/types";
+import { PaymentTerm } from "@/types";
 import { cookies } from "next/headers";
 
-export const updateAdmin = async (
-  { data }: { data: MutateAdminDTO },
-  id: string
-) => {
+export const createPaymentTerm = async ({
+  data,
+}: {
+  data: MutatePaymentTermDTO;
+}) => {
   try {
-    const fetchResponse = await fetch(constructEndpoint(`admin/${id}`), {
-      method: "PUT",
+    const fetchResponse = await fetch(constructEndpoint("payment-term"), {
+      method: "POST",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
@@ -20,6 +21,7 @@ export const updateAdmin = async (
         }`,
       },
     });
+
     const response = await fetchResponse.json();
     if (!fetchResponse.ok) {
       return {
@@ -30,7 +32,7 @@ export const updateAdmin = async (
     }
 
     return {
-      data: response.data as AdminAccount,
+      data: response.data as PaymentTerm,
       error: null,
       errorFields: null,
     };

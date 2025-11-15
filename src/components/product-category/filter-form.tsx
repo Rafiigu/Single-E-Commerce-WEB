@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -9,9 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 import { SearchIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 type Props = {
   appliedFilters: {
@@ -20,7 +20,7 @@ type Props = {
   };
 };
 
-export const UserFilterForm = ({ appliedFilters }: Props) => {
+export const ProductCategoryFilterForm = ({ appliedFilters }: Props) => {
   const router = useRouter();
   const [filter, setFilter] = useState({
     search: appliedFilters.search || "",
@@ -37,7 +37,7 @@ export const UserFilterForm = ({ appliedFilters }: Props) => {
           searchParams.set(key, value);
         });
 
-        router.push(`/account/user?${searchParams.toString()}`);
+        router.push(`/product-category?${searchParams.toString()}`);
       }}
     >
       <Input
@@ -53,13 +53,13 @@ export const UserFilterForm = ({ appliedFilters }: Props) => {
         }}
       />
       <Select>
-        <SelectTrigger label="Status" className="w-57">
+        <SelectTrigger label="Status" className="w-48">
           <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">Semua</SelectItem>
-          <SelectItem value="verified">Terverifikasi</SelectItem>
-          <SelectItem value="not-verified">Belum Terverifikasi</SelectItem>
+          <SelectItem value="active">Aktif</SelectItem>
+          <SelectItem value="inactive">Non Aktif</SelectItem>
         </SelectContent>
       </Select>
       <Button className="size-9">
