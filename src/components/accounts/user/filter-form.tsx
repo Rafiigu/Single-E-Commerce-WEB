@@ -52,7 +52,14 @@ export const UserFilterForm = ({ appliedFilters }: Props) => {
           }));
         }}
       />
-      <Select>
+      <Select
+        onValueChange={(v) => {
+          setFilter((st) => ({
+            ...st,
+            status: v,
+          }));
+        }}
+      >
         <SelectTrigger label="Status" className="w-57">
           <SelectValue placeholder="Status" />
         </SelectTrigger>

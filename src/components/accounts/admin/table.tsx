@@ -71,7 +71,10 @@ export const AdminAccountTable = ({ accounts, page, total }: Props) => {
                 <EllipsisVerticalIcon />
               </Button>
             </PopoverTrigger>
-            <PopoverContent align="end" className="w-44 p-2">
+            <PopoverContent
+              align="end"
+              className="w-44 p-1.5 bg-white shadow-lg rounded-lg"
+            >
               <Link href={`/account/admin/${row.id}/edit`}>
                 <Button
                   variant="ghost"

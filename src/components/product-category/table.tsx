@@ -25,7 +25,7 @@ export const ProductCategoryTable = ({ categories, page, total }: Props) => {
       total={total}
       page={page}
       headers={{
-        name: "Nama Produk",
+        name: "Nama",
         status: "Status",
       }}
       render={{
@@ -47,7 +47,7 @@ export const ProductCategoryTable = ({ categories, page, total }: Props) => {
         },
       }}
       minWidths={{
-        name: "min-w-[180px] w-[180px]",
+        name: "min-w-[180px] w-full",
         status: "min-w-[150px] w-[150px]",
       }}
       renderActionColumn={(row) => {
@@ -58,7 +58,10 @@ export const ProductCategoryTable = ({ categories, page, total }: Props) => {
                 <EllipsisVerticalIcon />
               </Button>
             </PopoverTrigger>
-            <PopoverContent align="end" className="w-44 p-2">
+            <PopoverContent
+              align="end"
+              className="w-44 p-1.5 bg-white shadow-lg rounded-lg"
+            >
               <Link href={`/product-category/${row.id}/edit`}>
                 <Button
                   variant="ghost"

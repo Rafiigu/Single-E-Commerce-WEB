@@ -52,7 +52,14 @@ export const AdminFilterForm = ({ appliedFilters }: Props) => {
           }));
         }}
       />
-      <Select>
+      <Select
+        onValueChange={(v) => {
+          setFilter((st) => ({
+            ...st,
+            status: v,
+          }));
+        }}
+      >
         <SelectTrigger label="Status" className="w-48">
           <SelectValue placeholder="Status" />
         </SelectTrigger>

@@ -43,7 +43,7 @@ export const PaymentTermFilterForm = ({ appliedFilters }: Props) => {
         name="search"
         containerClassName="w-64 h-9"
         value={filter.search}
-        placeholder="Input name or email"
+        placeholder="Input nama tipe pembayaran"
         onChange={(e) => {
           setFilter((st) => ({
             ...st,
@@ -51,7 +51,14 @@ export const PaymentTermFilterForm = ({ appliedFilters }: Props) => {
           }));
         }}
       />
-      <Select>
+      <Select
+        onValueChange={(v) => {
+          setFilter((st) => ({
+            ...st,
+            status: v,
+          }));
+        }}
+      >
         <SelectTrigger label="Status" className="w-48">
           <SelectValue placeholder="Status" />
         </SelectTrigger>

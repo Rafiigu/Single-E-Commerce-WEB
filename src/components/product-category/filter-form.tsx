@@ -44,7 +44,7 @@ export const ProductCategoryFilterForm = ({ appliedFilters }: Props) => {
         name="search"
         containerClassName="w-64 h-9"
         value={filter.search}
-        placeholder="Input name or email"
+        placeholder="Input nama kategori produk"
         onChange={(e) => {
           setFilter((st) => ({
             ...st,
@@ -52,7 +52,14 @@ export const ProductCategoryFilterForm = ({ appliedFilters }: Props) => {
           }));
         }}
       />
-      <Select>
+      <Select
+        onValueChange={(v) => {
+          setFilter((st) => ({
+            ...st,
+            status: v,
+          }));
+        }}
+      >
         <SelectTrigger label="Status" className="w-48">
           <SelectValue placeholder="Status" />
         </SelectTrigger>
