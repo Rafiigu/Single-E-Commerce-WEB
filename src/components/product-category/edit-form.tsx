@@ -19,12 +19,10 @@ export const ProductCategoryEditForm = ({ productCategory }: Props) => {
       category={productCategory}
       errorFields={errorFields}
       action={async (formState) => {
-        const { data, error, errorFields } = await updateCategory(
-          {
-            data: formState,
-          },
-          productCategory.id
-        );
+        const { data, error, errorFields } = await updateCategory({
+          id: productCategory.id,
+          data: formState,
+        });
 
         if (errorFields !== null) {
           setErrorFields(errorFields);

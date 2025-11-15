@@ -5,7 +5,6 @@ export const constructEndpoint = (
   searchParams?: Record<string, string | number | undefined | null>
 ) => {
   let endpointURL = `${process.env.API_URL}/${endpoint}`;
-
   if (searchParams) {
     endpointURL = `${endpointURL}?${buildSearchParams(searchParams)}`;
   }

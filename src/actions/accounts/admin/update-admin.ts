@@ -5,10 +5,13 @@ import { constructEndpoint } from "@/lib/api";
 import { AdminAccount } from "@/types";
 import { cookies } from "next/headers";
 
-export const updateAdmin = async (
-  { data }: { data: MutateAdminDTO },
-  id: string
-) => {
+export const updateAdmin = async ({
+  id,
+  data,
+}: {
+  id: string;
+  data: MutateAdminDTO;
+}) => {
   try {
     const fetchResponse = await fetch(constructEndpoint(`admin/${id}`), {
       method: "PUT",

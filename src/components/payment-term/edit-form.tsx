@@ -19,12 +19,10 @@ export const PaymentTermEditForm = ({ paymentTerm }: Props) => {
       paymentTerm={paymentTerm}
       errorFields={errorFields}
       action={async (formState) => {
-        const { data, error, errorFields } = await updatePaymentTerm(
-          {
-            data: formState,
-          },
-          paymentTerm.id
-        );
+        const { data, error, errorFields } = await updatePaymentTerm({
+          id: paymentTerm.id,
+          data: formState,
+        });
         if (errorFields !== null) {
           setErrorFields(errorFields);
         } else if (error) {

@@ -5,10 +5,13 @@ import { constructEndpoint } from "@/lib/api";
 import { PaymentTerm } from "@/types";
 import { cookies } from "next/headers";
 
-export const updatePaymentTerm = async (
-  { data }: { data: MutatePaymentTermDTO },
-  id: string
-) => {
+export const updatePaymentTerm = async ({
+  id,
+  data,
+}: {
+  id: string;
+  data: MutatePaymentTermDTO;
+}) => {
   try {
     const fetchResponse = await fetch(constructEndpoint(`payment-term/${id}`), {
       method: "PUT",

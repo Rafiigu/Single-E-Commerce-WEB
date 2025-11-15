@@ -5,10 +5,13 @@ import { constructEndpoint } from "@/lib/api";
 import { ProductCategory } from "@/types";
 import { cookies } from "next/headers";
 
-export const updateCategory = async (
-  { data }: { data: MutateCategoryDTO },
-  id: string
-) => {
+export const updateCategory = async ({
+  id,
+  data,
+}: {
+  id: string;
+  data: MutateCategoryDTO;
+}) => {
   try {
     const fetchResponse = await fetch(constructEndpoint(`category/${id}`), {
       method: "PUT",

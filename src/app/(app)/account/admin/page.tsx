@@ -32,7 +32,7 @@ const AdminAccountsPage = async ({ searchParams: rawSearchParams }: Props) => {
     <div className="flex w-full flex-col items-center justify-center p-4 gap-y-4">
       <div className="flex w-full items-center justify-between">
         <AdminFilterForm appliedFilters={searchParams} />
-        <Link href="/poduct-category/create">
+        <Link href="/account/admin/create">
           <Button>+ Tambah</Button>
         </Link>
       </div>

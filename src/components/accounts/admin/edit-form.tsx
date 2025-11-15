@@ -19,12 +19,10 @@ export const AdminAccountEditForm = ({ adminAccount }: Props) => {
       adminAccount={adminAccount}
       errorFields={errorFields}
       action={async (formState) => {
-        const { data, error, errorFields } = await updateAdmin(
-          {
-            data: formState,
-          },
-          adminAccount.id
-        );
+        const { data, error, errorFields } = await updateAdmin({
+          id: adminAccount.id,
+          data: formState,
+        });
 
         if (errorFields !== null) {
           setErrorFields(errorFields);
