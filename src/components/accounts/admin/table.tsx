@@ -1,8 +1,20 @@
 "use client";
 
+import { activateAdmin } from "@/actions/accounts/admin/activate-admin";
+import { deactivateAdmin } from "@/actions/accounts/admin/deactivate-admin";
 import { Table } from "@/components/shared/table";
 import { Badge, BadgeVariants } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Popover,
   PopoverContent,
@@ -11,6 +23,7 @@ import {
 import { AdminAccount } from "@/types";
 import { EllipsisVerticalIcon } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type Props = {
   accounts: AdminAccount[];
@@ -19,6 +32,8 @@ type Props = {
 };
 
 export const AdminAccountTable = ({ accounts, page, total }: Props) => {
+  const router = useRouter();
+
   return (
     <Table
       data={accounts}
@@ -83,6 +98,65 @@ export const AdminAccountTable = ({ accounts, page, total }: Props) => {
                   Edit
                 </Button>
               </Link>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start text-neutral-700 px-3"
+                  >
+                    {row.status === "active" ? "Non-aktifkan" : "Aktifkan"}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>
+                      {row.status === "active"
+                        ? "Non-aktifkan Akun"
+                        : "Aktifkan Akun"}
+                    </DialogTitle>
+                    <DialogDescription>
+                      {row.status === "active"
+                        ? "Apakah kamu yakin untuk menonaktifkan akun ini?"
+                        : "Apakah kamu yakin untuk mengaktifkan akun ini?"}
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button
+                        onClick={async () => {
+                          let error = null;
+                          if (row.status === "active") {
+                            const { error: err } = await deactivateAdmin({
+                              id: row.id,
+                            });
+                            error = err;
+                          } else {
+                            const { error: err } = await activateAdmin({
+                              id: row.id,
+                            });
+                            error = err;
+                          }
+
+                          if (error) {
+                            alert(error);
+                          } else {
+                            alert(
+                              `${
+                                row.status === "active"
+                                  ? "Nonaktifkan"
+                                  : "Aktifkan"
+                              } akun berhasil.`
+                            );
+                          }
+                          router.refresh();
+                        }}
+                      >
+                        {row.status === "active" ? "Non-aktifkan" : "Aktifkan"}
+                      </Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </PopoverContent>
           </Popover>
         );
