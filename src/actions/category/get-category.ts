@@ -18,7 +18,6 @@ export const getCategory = async ({ id }: { id: string }) => {
     if (!fetchResponse.ok) {
       return {
         data: null,
-        total: 0,
         error: response.error.message || null,
       };
     }
@@ -32,7 +31,6 @@ export const getCategory = async ({ id }: { id: string }) => {
   } catch (error) {
     return {
       data: null,
-      total: 0,
       error: (error as Error).message || null,
     };
   }
