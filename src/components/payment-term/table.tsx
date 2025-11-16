@@ -21,7 +21,7 @@ import { deactivateAdmin } from "@/actions/accounts/admin/deactivate-admin";
 import { activateAdmin } from "@/actions/accounts/admin/activate-admin";
 import { useRouter } from "next/navigation";
 import { deactivatePaymentTerm } from "@/actions/payment-term/deactivate-payment-term";
-import { activatePaymentTerm } from "@/actions/payment-term/activate-payment-term copy";
+import { activatePaymentTerm } from "@/actions/payment-term/activate-payment-term";
 
 type Props = {
   paymentTerm: PaymentTerm[];
