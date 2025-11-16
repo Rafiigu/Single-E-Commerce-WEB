@@ -74,7 +74,7 @@ export const ProductCategoryTable = ({ categories, page, total }: Props) => {
             </PopoverTrigger>
             <PopoverContent
               align="end"
-              className="w-44 p-1.5 bg-white shadow-lg rounded-lg"
+              className="w-44 p-1.5 bg-white shadow-lg rounded-lg z-10"
             >
               <Link href={`/product-category/${row.id}/edit`}>
                 <Button

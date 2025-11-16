@@ -17,8 +17,6 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { deactivateAdmin } from "@/actions/accounts/admin/deactivate-admin";
-import { activateAdmin } from "@/actions/accounts/admin/activate-admin";
 import { useRouter } from "next/navigation";
 import { deactivatePaymentTerm } from "@/actions/payment-term/deactivate-payment-term";
 import { activatePaymentTerm } from "@/actions/payment-term/activate-payment-term";
@@ -72,7 +70,7 @@ export const PaymentTermTable = ({ paymentTerm, page, total }: Props) => {
             </PopoverTrigger>
             <PopoverContent
               align="end"
-              className="w-44 p-1.5 bg-white shadow-lg rounded-lg"
+              className="w-44 p-1.5 bg-white shadow-lg rounded-lg z-10"
             >
               <Link href={`/payment-term/${row.id}/edit`}>
                 <Button
