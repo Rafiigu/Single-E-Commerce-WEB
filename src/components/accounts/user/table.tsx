@@ -2,25 +2,9 @@
 
 import { Table } from "@/components/shared/table";
 import { Badge, BadgeVariants } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+
 import { UserAccount } from "@/types";
 import { formatRupiah } from "@/utils/format-rupiah";
-import { EllipsisVerticalIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 type Props = {
