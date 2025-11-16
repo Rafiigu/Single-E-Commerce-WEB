@@ -1,7 +1,5 @@
 "use client";
 
-import { activateUser } from "@/actions/accounts/user/activate-user";
-import { deactivateUser } from "@/actions/accounts/user/deactivate-user";
 import { Table } from "@/components/shared/table";
 import { Badge, BadgeVariants } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
