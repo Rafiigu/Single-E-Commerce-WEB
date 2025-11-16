@@ -7,6 +7,21 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { EllipsisVerticalIcon } from "lucide-react";
 import Link from "next/link";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { DialogClose } from "@radix-ui/react-dialog";
+import { deactivateAdmin } from "@/actions/accounts/admin/deactivate-admin";
+import { activateAdmin } from "@/actions/accounts/admin/activate-admin";
+import { useRouter } from "next/navigation";
+import { deactivatePaymentTerm } from "@/actions/payment-term/deactivate-payment-term";
+import { activatePaymentTerm } from "@/actions/payment-term/activate-payment-term copy";
 
 type Props = {
   paymentTerm: PaymentTerm[];
@@ -15,6 +30,7 @@ type Props = {
 };
 
 export const PaymentTermTable = ({ paymentTerm, page, total }: Props) => {
+  const router = useRouter();
   return (
     <Table
       data={paymentTerm}
@@ -66,6 +82,65 @@ export const PaymentTermTable = ({ paymentTerm, page, total }: Props) => {
                   Edit
                 </Button>
               </Link>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start text-neutral-700 px-3"
+                  >
+                    {row.status === "active" ? "Non-aktifkan" : "Aktifkan"}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>
+                      {row.status === "active"
+                        ? "Non-aktifkan Cara Pembayaran"
+                        : "Aktifkan Cara Pembayaran"}
+                    </DialogTitle>
+                    <DialogDescription>
+                      {row.status == "active"
+                        ? "Apakah kamu yakin untuk menonaktifkan cara pembayaran ini?"
+                        : "Apakah kamu yakin untuk mengaktifkan cara pembayaran ini?"}
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button
+                        onClick={async () => {
+                          let error = null;
+                          if (row.status === "active") {
+                            const { error: err } = await deactivatePaymentTerm({
+                              id: row.id,
+                            });
+                            error = err;
+                          } else {
+                            const { error: err } = await activatePaymentTerm({
+                              id: row.id,
+                            });
+                            error = err;
+                          }
+
+                          if (error) {
+                            alert(error);
+                          } else {
+                            alert(
+                              `${
+                                row.status === "active"
+                                  ? "Nonaktifkan"
+                                  : "Aktifkan"
+                              } cara pembayaran berhasil. `
+                            );
+                          }
+                          router.refresh();
+                        }}
+                      >
+                        {row.status === "active" ? "Non-aktifkan" : "Aktifkan"}
+                      </Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </PopoverContent>
           </Popover>
         );

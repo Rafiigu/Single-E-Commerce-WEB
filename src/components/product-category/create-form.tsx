@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { createCategory } from "@/actions/category/create-product";
+import { createCategory } from "@/actions/category/create-category";
 import { ProductCategoryDetailsForm } from "./details-form";
 
 export const CategoryCreateForm = () => {
