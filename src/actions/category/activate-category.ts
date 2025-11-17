@@ -2,7 +2,7 @@
 
 import { constructEndpoint } from "@/lib/api";
 import { cookies } from "next/headers";
-import { ProductCategory } from "@/types";
+import { Category } from "@/types";
 
 export const activateCategory = async ({ id }: { id: string }) => {
   try {
@@ -28,7 +28,7 @@ export const activateCategory = async ({ id }: { id: string }) => {
     }
 
     return {
-      data: response.data as ProductCategory,
+      data: response.data as Category,
       total: response.total,
       error: null,
       errorFields: null,

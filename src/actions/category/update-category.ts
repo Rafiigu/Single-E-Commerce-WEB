@@ -2,7 +2,7 @@
 
 import { MutateCategoryDTO } from "@/dto";
 import { constructEndpoint } from "@/lib/api";
-import { ProductCategory } from "@/types";
+import { Category } from "@/types";
 import { cookies } from "next/headers";
 
 export const updateCategory = async ({
@@ -33,7 +33,7 @@ export const updateCategory = async ({
     }
 
     return {
-      data: response.data as ProductCategory,
+      data: response.data as Category,
       error: null,
       errorFields: null,
     };

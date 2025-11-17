@@ -1,6 +1,6 @@
 import { getCategory } from "@/actions/category/get-category";
 import { ProductCategoryEditForm } from "@/components/product-category/edit-form";
-import { ProductCategory } from "@/types";
+import { Category } from "@/types";
 
 type Props = {
   params: Promise<{
@@ -17,9 +17,7 @@ const EditProductCategoryPage = async ({ params: rawParams }: Props) => {
 
   return (
     <div className="flex w-full flex-col items-center justify-center p-4 gap-y-4">
-      <ProductCategoryEditForm
-        productCategory={productCategory as ProductCategory}
-      />
+      <ProductCategoryEditForm productCategory={productCategory as Category} />
     </div>
   );
 };

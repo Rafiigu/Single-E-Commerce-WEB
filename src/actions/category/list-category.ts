@@ -1,7 +1,7 @@
 "use server";
 
 import { constructEndpoint } from "@/lib/api";
-import { ProductCategory } from "@/types";
+import { Category } from "@/types";
 import { cookies } from "next/headers";
 
 export const listCategories = async ({
@@ -38,21 +38,21 @@ export const listCategories = async ({
     const response = await fetchResponse.json();
     if (!fetchResponse.ok) {
       return {
-        data: [] as ProductCategory[],
+        data: [] as Category[],
         total: 0,
         error: response.error.message || null,
       };
     }
 
     return {
-      data: response.data as ProductCategory[],
+      data: response.data as Category[],
       total: response.total,
       error: null,
       errorFields: null,
     };
   } catch (error) {
     return {
-      data: [] as ProductCategory[],
+      data: [] as Category[],
       total: 0,
       error: (error as Error).message || null,
     };

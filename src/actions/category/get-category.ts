@@ -1,7 +1,7 @@
 "use server";
 
 import { constructEndpoint } from "@/lib/api";
-import { ProductCategory } from "@/types";
+import { Category } from "@/types";
 import { cookies } from "next/headers";
 
 export const getCategory = async ({ id }: { id: string }) => {
@@ -23,7 +23,7 @@ export const getCategory = async ({ id }: { id: string }) => {
     }
 
     return {
-      data: response.data as ProductCategory,
+      data: response.data as Category,
       total: response.total,
       error: null,
       errorFields: null,

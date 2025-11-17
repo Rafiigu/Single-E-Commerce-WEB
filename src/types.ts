@@ -21,7 +21,7 @@ export type UserAccount = {
   updatedAt: Date;
 };
 
-export type ProductCategory = {
+export type Category = {
   id: string;
   name: string;
   status: string;
@@ -34,5 +34,5 @@ export type PaymentTerm = {
   name: string;
   status: string;
   createdAt: Date;
-  updatedAt: Date
-}
+  updatedAt: Date;
+};

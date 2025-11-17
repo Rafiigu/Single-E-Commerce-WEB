@@ -1,22 +1,11 @@
 "use client";
 
-import { ProductCategory } from "@/types";
-import { Combobox } from "./ui/combobox";
+import { CategoryCombobox } from "./shared/comboboxes/category";
 
-export const ExampleForm = ({
-  categories,
-}: {
-  categories: ProductCategory[];
-}) => {
+export const ExampleForm = () => {
   return (
     <form>
-      <Combobox
-        options={categories.map((c) => ({ value: c, label: c.name }))}
-        placeholder="Select category"
-        onQueryValueChange={(search) => {
-          console.log(search);
-          // tembak ke corresponding API.
-        }}
+      <CategoryCombobox
         onValueChange={(v) => {
           console.log(v);
         }}

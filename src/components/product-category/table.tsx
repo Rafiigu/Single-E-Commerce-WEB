@@ -1,6 +1,6 @@
 "use client";
 
-import { ProductCategory } from "@/types";
+import { Category } from "@/types";
 import { Table } from "../shared/table";
 import { Badge, BadgeVariants } from "../ui/badge";
 import {
@@ -26,7 +26,7 @@ import {
 import { useRouter } from "next/navigation";
 
 type Props = {
-  categories: ProductCategory[];
+  categories: Category[];
   page: number;
   total: number;
 };

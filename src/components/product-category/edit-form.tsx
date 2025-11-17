@@ -1,13 +1,13 @@
 "use client";
 
-import { ProductCategory } from "@/types";
+import { Category } from "@/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ProductCategoryDetailsForm } from "./details-form";
 import { updateCategory } from "@/actions/category/update-category";
 
 type Props = {
-  productCategory: ProductCategory;
+  productCategory: Category;
 };
 
 export const ProductCategoryEditForm = ({ productCategory }: Props) => {

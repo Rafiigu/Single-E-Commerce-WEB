@@ -1,6 +1,6 @@
 "use client";
 
-import { ProductCategory } from "@/types";
+import { Category } from "@/types";
 import { useState } from "react";
 import { FormHint } from "../shared/form-hint";
 import { Input } from "../ui/input";
@@ -13,7 +13,7 @@ type FormState = {
 type Props = {
   errorFields?: Record<string, string>;
   action: (formState: FormState) => void;
-  category?: ProductCategory | null;
+  category?: Category | null;
 };
 
 export const ProductCategoryDetailsForm = ({

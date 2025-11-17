@@ -24,22 +24,33 @@ type Option<T> = {
   label: string;
 };
 
-type Props<T> = {
-  options: Option<T>[];
+export type ComboboxProps<T> = {
+  value?: string | null;
   placeholder: string;
-  onQueryValueChange: (search: string) => void;
+  queryFn: (search: string) => Promise<Option<T>[]>;
   onValueChange: (data?: T) => void;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function Combobox<T extends Record<string, any>>({
   placeholder,
-  options,
-  onQueryValueChange,
+  value = null,
+  queryFn,
   onValueChange,
-}: Props<T>) {
+}: ComboboxProps<T>) {
+  const [options, setOptions] = React.useState<Option<T>[]>([]);
+  const [searchValue, setSearchValue] = React.useState("");
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState<string>("");
+  const [currentValue, setCurrentValue] = React.useState(value);
+
+  React.useEffect(() => {
+    const fetchAsync = async () => {
+      const options = await queryFn(searchValue);
+      setOptions(options);
+    };
+
+    fetchAsync();
+  }, [queryFn, searchValue]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -50,8 +61,8 @@ export function Combobox<T extends Record<string, any>>({
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {value
-            ? options.find((option) => option.value.id === value)?.label
+          {currentValue
+            ? options.find((option) => option.value.id === currentValue)?.label
             : placeholder}
           <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -59,8 +70,12 @@ export function Combobox<T extends Record<string, any>>({
       <PopoverContent className="w-[200px] p-0">
         <Command>
           <CommandInput
+            value={searchValue}
             placeholder={placeholder}
-            onValueChange={(v) => onQueryValueChange(v)}
+            onValueChange={(v) => {
+              setSearchValue(v);
+              setCurrentValue(null);
+            }}
           />
           {/* Kita nanti harus ada mekanisme searching sendiri. Kenapa?
           karena kalau kita searching pakai CommandInput, dia itu look up value
@@ -70,15 +85,14 @@ export function Combobox<T extends Record<string, any>>({
           <CommandList>
             <CommandEmpty>No option found.</CommandEmpty>
             <CommandGroup>
-              {options.map((option) => (
+              {options.map((option, i) => (
                 <CommandItem
-                  key={`option-${option.value.id}`}
+                  key={`option-${option.value.id}-${i}`}
                   value={option.value.id}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
+                  onSelect={(v) => {
+                    setCurrentValue(v === currentValue ? "" : v);
                     onValueChange(
-                      options.find((option) => option.value.id === currentValue)
-                        ?.value
+                      options.find((option) => option.value.id === v)?.value
                     );
                     setOpen(false);
                   }}
@@ -86,7 +100,9 @@ export function Combobox<T extends Record<string, any>>({
                   <CheckIcon
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === option.value.id ? "opacity-100" : "opacity-0"
+                      currentValue === option.value.id
+                        ? "opacity-100"
+                        : "opacity-0"
                     )}
                   />
                   {option.label}
