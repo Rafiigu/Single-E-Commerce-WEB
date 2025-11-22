@@ -6,8 +6,8 @@ export type AdminAccount = {
   name: string;
   role: AdminRole;
   isPasswordChanged: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type UserAccount = {
@@ -17,22 +17,35 @@ export type UserAccount = {
   id: string;
   profile: string;
   balance: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type Category = {
   id: string;
   name: string;
   status: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type PaymentTerm = {
   id: string;
   name: string;
   status: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type Product = {
+  id: string;
+  name: string;
+  status: string;
+  price: number;
+  stock: number;
+  description: string;
+  imageFileName: string;
+  category: Pick<Category, "id" | "name">;
+  createdAt: string;
+  updatedAt: string;
 };

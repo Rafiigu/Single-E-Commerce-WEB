@@ -54,6 +54,16 @@ export function Combobox<T extends Record<string, any>>({
     fetchAsync();
   }, [queryFn, debouncedSearchValue]);
 
+  const optionsMap = React.useMemo(() => {
+    const optionsMap: Record<string, string> = {};
+
+    for (let i = 0; i < options.length; i++) {
+      optionsMap[options[i].value.id] = options[i].label;
+      // key: id, value: label
+    }
+    return optionsMap;
+  }, [options]);
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -63,19 +73,8 @@ export function Combobox<T extends Record<string, any>>({
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {/* TODO: perlu efisiensi */}
           {currentValue && currentValue.length > 0 ? (
-            <span>
-              {currentValue
-                .map((id) => {
-                  const option = options.find(
-                    (option) => option.value.id === id
-                  );
-                  return option ? option.label : "";
-                })
-                .filter((v) => v.length > 0)
-                .join(", ")}
-            </span>
+            <span>{currentValue.map((id) => optionsMap[id]).join(", ")}</span>
           ) : (
             <span className="text-neutral-500 font-normal">{placeholder}</span>
           )}
@@ -119,7 +118,6 @@ export function Combobox<T extends Record<string, any>>({
                         )
                         .map((option) => option.value)
                     );
-                    setOpen(false);
                   }}
                 >
                   <CheckIcon
