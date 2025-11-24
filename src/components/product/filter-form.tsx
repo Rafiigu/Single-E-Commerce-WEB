@@ -12,11 +12,13 @@ import {
 } from "../ui/select";
 import { Button } from "../ui/button";
 import { SearchIcon } from "lucide-react";
+import { CategoryCombobox } from "../shared/comboboxes/category";
 
 type Props = {
   appliedFilters: {
     search?: string;
     status?: string;
+    categoryId?: string;
   };
 };
 
@@ -25,6 +27,7 @@ export const ProductFilterForm = ({ appliedFilters }: Props) => {
   const [filter, setFilter] = useState({
     search: appliedFilters.search || "",
     status: appliedFilters.status || "all",
+    categoryId: appliedFilters.categoryId || "all",
   });
   return (
     <form
@@ -68,6 +71,18 @@ export const ProductFilterForm = ({ appliedFilters }: Props) => {
           <SelectItem value="inactive">Non Aktif</SelectItem>
         </SelectContent>
       </Select>
+      <CategoryCombobox
+        label="Category"
+        placeholder="Category"
+        value={[filter.categoryId]}
+        onValueChange={(val) => {
+          setFilter((st) => ({
+            ...st,
+            categoryId: val?.at(-1)?.id || "all",
+          }));
+        }}
+        includeAllOption
+      />
       <Button className="size-9">
         <SearchIcon />
       </Button>

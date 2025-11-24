@@ -27,15 +27,19 @@ type Option<T> = {
 
 export type ComboboxProps<T> = {
   value?: string[];
-  placeholder: string;
+  label?: string;
+  placeholder?: string;
+  includeAllOption?: boolean;
   queryFn: (search: string) => Promise<Option<T>[]>;
   onValueChange: (data?: T[]) => void;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function Combobox<T extends Record<string, any>>({
-  placeholder,
   value = [],
+  label,
+  placeholder,
+  includeAllOption = false,
   queryFn,
   onValueChange,
 }: ComboboxProps<T>) {
@@ -57,12 +61,16 @@ export function Combobox<T extends Record<string, any>>({
   const optionsMap = React.useMemo(() => {
     const optionsMap: Record<string, string> = {};
 
+    if (includeAllOption) {
+      optionsMap["all"] = "Semua";
+    }
+
     for (let i = 0; i < options.length; i++) {
       optionsMap[options[i].value.id] = options[i].label;
       // key: id, value: label
     }
     return optionsMap;
-  }, [options]);
+  }, [includeAllOption, options]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -71,13 +79,20 @@ export function Combobox<T extends Record<string, any>>({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="w-[200px] justify-between h-[2.5rem] border-neutral-400"
         >
-          {currentValue && currentValue.length > 0 ? (
-            <span>{currentValue.map((id) => optionsMap[id]).join(", ")}</span>
-          ) : (
-            <span className="text-neutral-500 font-normal">{placeholder}</span>
-          )}
+          <div className="w-full flex items-center">
+            <span className="text-neutral-700 mr-2">
+              {label ? `${label}: ` : ""}
+            </span>
+            {currentValue && currentValue.length > 0 ? (
+              <span>{currentValue.map((id) => optionsMap[id]).join(", ")}</span>
+            ) : (
+              <span className="text-neutral-500 font-normal">
+                {placeholder}
+              </span>
+            )}
+          </div>
           <ChevronDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -99,6 +114,17 @@ export function Combobox<T extends Record<string, any>>({
           <CommandList>
             <CommandEmpty>No option found.</CommandEmpty>
             <CommandGroup>
+              {includeAllOption ? (
+                <CommandItem value="all">
+                  <CheckIcon
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      currentValue.includes("all") ? "opacity-100" : "opacity-0"
+                    )}
+                  />
+                  Semua
+                </CommandItem>
+              ) : null}
               {options.map((option, i) => (
                 <CommandItem
                   key={`option-${option.value.id}-${i}`}

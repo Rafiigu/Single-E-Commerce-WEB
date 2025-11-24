@@ -10,12 +10,14 @@ export const listProducts = async ({
   size = 20,
   search,
   status = "all",
+  categoryId = "all",
 }: {
   mode?: "all" | "pagination";
   page: number;
   size?: number;
   search?: string;
   status?: string;
+  categoryId?: string;
 }) => {
   try {
     const fetchResponse = await fetch(

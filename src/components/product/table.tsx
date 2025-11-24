@@ -61,7 +61,7 @@ export const ProductTable = ({ products, page, total }: Props) => {
         status(val) {
           const variantMap: Record<string, BadgeVariants> = {
             active: "success",
-            inactive: "default",
+            inactive: "danger",
           };
 
           const valueMap: Record<string, string> = {

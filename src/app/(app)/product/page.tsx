@@ -9,6 +9,7 @@ type Props = {
     page?: string;
     search?: string;
     status?: string;
+    categoryId?: string;
   }>;
 };
 
@@ -23,6 +24,7 @@ const PaymentTermPage = async ({ searchParams: rawSearchParams }: Props) => {
     page,
     search: searchParams.search,
     status: searchParams.status,
+    categoryId: searchParams.categoryId,
   });
   if (error) {
     throw new Error(error);
