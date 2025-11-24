@@ -1,6 +1,6 @@
-import { listPaymentTerms } from "@/actions/payment-term/list-payment-term";
-import { PaymentTermFilterForm } from "@/components/payment-term/filter-form";
-import { PaymentTermTable } from "@/components/payment-term/table";
+import { listProducts } from "@/actions/product/list-product";
+import { ProductFilterForm } from "@/components/product/filter-form";
+import { ProductTable } from "@/components/product/table";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -16,10 +16,10 @@ const PaymentTermPage = async ({ searchParams: rawSearchParams }: Props) => {
   const searchParams = await rawSearchParams;
   const page = Math.max(parseInt(searchParams.page || "1"), 1);
   const {
-    data: paymentTerms,
+    data: products,
     total,
     error,
-  } = await listPaymentTerms({
+  } = await listProducts({
     page,
     search: searchParams.search,
     status: searchParams.status,
@@ -30,12 +30,12 @@ const PaymentTermPage = async ({ searchParams: rawSearchParams }: Props) => {
   return (
     <div className="flex w-full flex-col items-center justify-center p-4 gap-y-4">
       <div className="flex w-full items-center justify-between">
-        <PaymentTermFilterForm appliedFilters={searchParams} />
+        <ProductFilterForm appliedFilters={searchParams} />
         <Link href="/payment-term/create">
           <Button>+ Tambah</Button>
         </Link>
       </div>
-      <PaymentTermTable paymentTerms={paymentTerms} page={page} total={total} />
+      <ProductTable products={products} page={page} total={total} />
     </div>
   );
 };

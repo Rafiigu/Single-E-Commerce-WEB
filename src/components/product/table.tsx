@@ -1,14 +1,15 @@
 "use client";
 
-import { PaymentTerm } from "@/types";
+import { Product } from "@/types";
+import { useRouter } from "next/navigation";
 import { Table } from "../shared/table";
-import { Badge, BadgeVariants } from "../ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { EllipsisVerticalIcon } from "lucide-react";
 import Link from "next/link";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -16,31 +17,46 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { DialogClose } from "@radix-ui/react-dialog";
-import { useRouter } from "next/navigation";
-import { deactivatePaymentTerm } from "@/actions/payment-term/deactivate-payment-term";
-import { activatePaymentTerm } from "@/actions/payment-term/activate-payment-term";
+import { deactivateProduct } from "@/actions/product/deactivate-product";
+import { activateProduct } from "@/actions/product/activate-product";
+import { Badge, BadgeVariants } from "../ui/badge";
 
 type Props = {
-  paymentTerms: PaymentTerm[];
+  products: Product[];
   page: number;
   total: number;
 };
 
-export const PaymentTermTable = ({ paymentTerms, page, total }: Props) => {
+export const ProductTable = ({ products, page, total }: Props) => {
   const router = useRouter();
   return (
     <Table
-      data={paymentTerms}
+      data={products}
       total={total}
       page={page}
       headers={{
         name: "Nama",
+        price: "Harga",
+        stock: "Stok",
+        description: "Deskripsi",
+        category: "Kategori",
         status: "Status",
       }}
       render={{
         name(val) {
           return <span className="text-neutral-900">{val}</span>;
+        },
+        price(val) {
+          return <span className="text-neutral-900">{val}</span>;
+        },
+        stock(val) {
+          return <span className="text-neutral-900">{val}</span>;
+        },
+        description(val) {
+          return <span className="text-neutral-900">{val}</span>;
+        },
+        category(val) {
+          return <span className="text-neutral-900">{val.name}</span>;
         },
         status(val) {
           const variantMap: Record<string, BadgeVariants> = {
@@ -58,7 +74,10 @@ export const PaymentTermTable = ({ paymentTerms, page, total }: Props) => {
       }}
       minWidths={{
         name: "min-w-[180px] w-full",
-        status: "min-w-[150px] w-[150px]",
+        price: "min-w-[150px] w-[150px]",
+        stock: "min-w-[100px] w-[100px]",
+        description: "min-w-[200px] w-[200px]",
+        category: "min-w-[150px] w-[150px]",
       }}
       renderActionColumn={(row) => {
         return (
@@ -72,7 +91,7 @@ export const PaymentTermTable = ({ paymentTerms, page, total }: Props) => {
               align="end"
               className="w-44 p-1.5 bg-white shadow-lg rounded-lg z-10"
             >
-              <Link href={`/payment-term/${row.id}/edit`}>
+              <Link href={`/product/${row.id}/edit`}>
                 <Button
                   variant={"ghost"}
                   className="w-full justify-start text-neutral-700 px-3"
@@ -93,13 +112,13 @@ export const PaymentTermTable = ({ paymentTerms, page, total }: Props) => {
                   <DialogHeader>
                     <DialogTitle>
                       {row.status === "active"
-                        ? "Non-aktifkan Cara Pembayaran"
-                        : "Aktifkan Cara Pembayaran"}
+                        ? "Non-aktifkan Produk"
+                        : "Aktifkan Produk"}
                     </DialogTitle>
                     <DialogDescription>
                       {row.status == "active"
-                        ? "Apakah kamu yakin untuk menonaktifkan cara pembayaran ini?"
-                        : "Apakah kamu yakin untuk mengaktifkan cara pembayaran ini?"}
+                        ? "Apakah kamu yakin untuk menonaktifkan produk ini?"
+                        : "Apakah kamu yakin untuk mengaktifkan produk ini?"}
                     </DialogDescription>
                   </DialogHeader>
                   <DialogFooter>
@@ -108,12 +127,12 @@ export const PaymentTermTable = ({ paymentTerms, page, total }: Props) => {
                         onClick={async () => {
                           let error = null;
                           if (row.status === "active") {
-                            const { error: err } = await deactivatePaymentTerm({
+                            const { error: err } = await deactivateProduct({
                               id: row.id,
                             });
                             error = err;
                           } else {
-                            const { error: err } = await activatePaymentTerm({
+                            const { error: err } = await activateProduct({
                               id: row.id,
                             });
                             error = err;
@@ -127,7 +146,7 @@ export const PaymentTermTable = ({ paymentTerms, page, total }: Props) => {
                                 row.status === "active"
                                   ? "Nonaktifkan"
                                   : "Aktifkan"
-                              } cara pembayaran berhasil. `
+                              } produk berhasil. `
                             );
                           }
                           router.refresh();
