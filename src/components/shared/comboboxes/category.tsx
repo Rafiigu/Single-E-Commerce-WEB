@@ -1,13 +1,8 @@
 import { listCategories } from "@/actions/category/list-category";
 import { Combobox } from "@/components/ui/combobox";
-import { Category } from "@/types";
 import { ComponentProps } from "react";
 
-// cek kenapa ComponentProps gak bisa infer.
-type Props = Omit<ComponentProps<typeof Combobox>, "queryFn"> & {
-  value: string[];
-  onValueChange: (data: Category[]) => void;
-};
+type Props = Omit<ComponentProps<typeof Combobox>, "queryFn">;
 
 export const CategoryCombobox = ({ value, onValueChange, ...props }: Props) => {
   return (
@@ -26,7 +21,7 @@ export const CategoryCombobox = ({ value, onValueChange, ...props }: Props) => {
           return [];
         }
 
-        return categories.map((c) => ({ value: c, label: c.name }));
+        return categories.map((c) => ({ data: c, value: c.id, label: c.name }));
       }}
       onValueChange={onValueChange}
       {...props}

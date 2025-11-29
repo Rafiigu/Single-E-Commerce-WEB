@@ -78,7 +78,7 @@ export const ProductFilterForm = ({ appliedFilters }: Props) => {
         onValueChange={(val) => {
           setFilter((st) => ({
             ...st,
-            categoryId: val?.at(-1)?.id || "all",
+            categoryId: val?.at(-1) || "all",
           }));
         }}
         includeAllOption

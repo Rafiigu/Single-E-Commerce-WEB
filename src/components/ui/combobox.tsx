@@ -21,7 +21,8 @@ import {
 import { useDebounce } from "@uidotdev/usehooks";
 
 type Option<T> = {
-  value: T;
+  data?: T;
+  value: string;
   label: string;
 };
 
@@ -31,7 +32,7 @@ export type ComboboxProps<T> = {
   placeholder?: string;
   includeAllOption?: boolean;
   queryFn: (search: string) => Promise<Option<T>[]>;
-  onValueChange: (data?: T[]) => void;
+  onValueChange: (value?: string[]) => void;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,30 +48,29 @@ export function Combobox<T extends Record<string, any>>({
   const [searchValue, setSearchValue] = React.useState("");
   const debouncedSearchValue = useDebounce(searchValue, 300);
   const [open, setOpen] = React.useState(false);
-  const [currentValue, setCurrentValue] = React.useState(value);
 
   React.useEffect(() => {
     const fetchAsync = async () => {
       const options = await queryFn(debouncedSearchValue);
-      setOptions(options);
+      if (includeAllOption) {
+        setOptions([{ label: "Semua", value: "all" }, ...options]);
+      } else {
+        setOptions(options);
+      }
     };
 
     fetchAsync();
-  }, [queryFn, debouncedSearchValue]);
+  }, [queryFn, debouncedSearchValue, includeAllOption]);
 
   const optionsMap = React.useMemo(() => {
     const optionsMap: Record<string, string> = {};
 
-    if (includeAllOption) {
-      optionsMap["all"] = "Semua";
-    }
-
     for (let i = 0; i < options.length; i++) {
-      optionsMap[options[i].value.id] = options[i].label;
+      optionsMap[options[i].value] = options[i].label;
       // key: id, value: label
     }
     return optionsMap;
-  }, [includeAllOption, options]);
+  }, [options]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -85,8 +85,8 @@ export function Combobox<T extends Record<string, any>>({
             <span className="text-neutral-700 mr-2">
               {label ? `${label}: ` : ""}
             </span>
-            {currentValue && currentValue.length > 0 ? (
-              <span>{currentValue.map((id) => optionsMap[id]).join(", ")}</span>
+            {value && value.length > 0 ? (
+              <span>{value.map((id) => optionsMap[id]).join(", ")}</span>
             ) : (
               <span className="text-neutral-500 font-normal">
                 {placeholder}
@@ -103,7 +103,6 @@ export function Combobox<T extends Record<string, any>>({
             placeholder={placeholder}
             onValueChange={(v) => {
               setSearchValue(v);
-              setCurrentValue([]);
             }}
           />
           {/* Kita nanti harus ada mekanisme searching sendiri. Kenapa?
@@ -114,42 +113,26 @@ export function Combobox<T extends Record<string, any>>({
           <CommandList>
             <CommandEmpty>No option found.</CommandEmpty>
             <CommandGroup>
-              {includeAllOption ? (
-                <CommandItem value="all">
-                  <CheckIcon
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      currentValue.includes("all") ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  Semua
-                </CommandItem>
-              ) : null}
               {options.map((option, i) => (
                 <CommandItem
-                  key={`option-${option.value.id}-${i}`}
-                  value={option.value.id}
+                  key={`option-${option.value}-${i}`}
+                  value={option.value}
                   onSelect={(v) => {
-                    let newCurrentValue: string[] = [];
-                    if (currentValue?.includes(v)) {
-                      newCurrentValue = currentValue.filter((s) => s !== v);
+                    console.log(v);
+                    if (value.includes(v)) {
+                      // jika value yang kita pilih ada di dalam currentValue, maka dia akan dikeluarkan dari currentValue
+                      onValueChange(value.filter((s) => s !== v));
+                    } else if (v !== "all") {
+                      onValueChange([...value, v]);
                     } else {
-                      newCurrentValue = [...currentValue, v];
+                      onValueChange([v]);
                     }
-                    setCurrentValue(newCurrentValue);
-                    onValueChange(
-                      options
-                        .filter((option) =>
-                          newCurrentValue.includes(option.value.id)
-                        )
-                        .map((option) => option.value)
-                    );
                   }}
                 >
                   <CheckIcon
                     className={cn(
                       "mr-2 h-4 w-4",
-                      currentValue.includes(option.value.id)
+                      value.includes(option.value) || value.includes("all")
                         ? "opacity-100"
                         : "opacity-0"
                     )}
