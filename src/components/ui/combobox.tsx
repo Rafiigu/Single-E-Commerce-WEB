@@ -45,9 +45,14 @@ export function Combobox<T extends Record<string, any>>({
   onValueChange,
 }: ComboboxProps<T>) {
   const [options, setOptions] = React.useState<Option<T>[]>([]);
+  const [selectedOptions, setSelectedOptions] = React.useState<Option<T>[]>([]);
   const [searchValue, setSearchValue] = React.useState("");
   const debouncedSearchValue = useDebounce(searchValue, 300);
   const [open, setOpen] = React.useState(false);
+  const initializedSelectedOptionsRef = React.useRef(false);
+  console.log("Rendered!");
+  console.log(selectedOptions);
+  console.log(value);
 
   React.useEffect(() => {
     const fetchAsync = async () => {
@@ -62,15 +67,29 @@ export function Combobox<T extends Record<string, any>>({
     fetchAsync();
   }, [queryFn, debouncedSearchValue, includeAllOption]);
 
-  const optionsMap = React.useMemo(() => {
+  // run once after options dan value ada.
+  React.useEffect(() => {
+    if (options.length > 0) {
+      if (!initializedSelectedOptionsRef.current) {
+        initializedSelectedOptionsRef.current = true;
+        setSelectedOptions(options.filter((o) => value.includes(o.value)));
+      }
+    }
+  }, [options, value]);
+
+  const availableOptionsWithSelectedOptions = React.useMemo(() => {
     const optionsMap: Record<string, string> = {};
 
     for (let i = 0; i < options.length; i++) {
       optionsMap[options[i].value] = options[i].label;
       // key: id, value: label
     }
+
+    for (let i = 0; i < selectedOptions.length; i++) {
+      optionsMap[selectedOptions[i].value] = selectedOptions[i].label;
+    }
     return optionsMap;
-  }, [options]);
+  }, [options, selectedOptions]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -81,12 +100,16 @@ export function Combobox<T extends Record<string, any>>({
           aria-expanded={open}
           className="w-[200px] justify-between h-[2.5rem] border-neutral-400"
         >
-          <div className="w-full flex items-center">
+          <div className="w-full flex items-center text-ellipsis">
             <span className="text-neutral-700 mr-2">
               {label ? `${label}: ` : ""}
             </span>
             {value && value.length > 0 ? (
-              <span>{value.map((id) => optionsMap[id]).join(", ")}</span>
+              <span>
+                {value
+                  .map((id) => availableOptionsWithSelectedOptions[id])
+                  .join(", ")}
+              </span>
             ) : (
               <span className="text-neutral-500 font-normal">
                 {placeholder}
@@ -118,14 +141,35 @@ export function Combobox<T extends Record<string, any>>({
                   key={`option-${option.value}-${i}`}
                   value={option.value}
                   onSelect={(v) => {
-                    console.log(v);
+                    console.log("Click", v);
                     if (value.includes(v)) {
                       // jika value yang kita pilih ada di dalam currentValue, maka dia akan dikeluarkan dari currentValue
                       onValueChange(value.filter((s) => s !== v));
+                      setSelectedOptions(
+                        value
+                          .filter((s) => s !== v)
+                          .map((s) => ({
+                            value: s,
+                            label: availableOptionsWithSelectedOptions[s],
+                          }))
+                      );
                     } else if (v !== "all") {
-                      onValueChange([...value, v]);
+                      onValueChange([...value.filter((v) => v !== "all"), v]);
+                      setSelectedOptions(
+                        [...value.filter((v) => v !== "all"), v].map((s) => ({
+                          value: s,
+                          label: availableOptionsWithSelectedOptions[s],
+                        }))
+                      );
                     } else {
+                      console.log("MASUK KE SINI");
                       onValueChange([v]);
+                      setSelectedOptions(
+                        [v].map((s) => ({
+                          value: s,
+                          label: availableOptionsWithSelectedOptions[s],
+                        }))
+                      );
                     }
                   }}
                 >
