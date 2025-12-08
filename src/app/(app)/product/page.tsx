@@ -33,7 +33,7 @@ const PaymentTermPage = async ({ searchParams: rawSearchParams }: Props) => {
     <div className="flex w-full flex-col items-center justify-center p-4 gap-y-4">
       <div className="flex w-full items-center justify-between">
         <ProductFilterForm appliedFilters={searchParams} />
-        <Link href="/payment-term/create">
+        <Link href="/product/create">
           <Button>+ Tambah</Button>
         </Link>
       </div>

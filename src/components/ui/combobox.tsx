@@ -31,6 +31,7 @@ export type ComboboxProps<T> = {
   label?: string;
   placeholder?: string;
   includeAllOption?: boolean;
+  className?: string;
   queryFn: (search: string) => Promise<Option<T>[]>;
   onValueChange: (value?: string[]) => void;
 };
@@ -41,6 +42,7 @@ export function Combobox<T extends Record<string, any>>({
   label,
   placeholder,
   includeAllOption = false,
+  className,
   queryFn,
   onValueChange,
 }: ComboboxProps<T>) {
@@ -98,12 +100,15 @@ export function Combobox<T extends Record<string, any>>({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between h-[2.5rem] border-neutral-400"
+          className={cn(
+            "w-full justify-between h-[2.5rem] border-neutral-400",
+            className
+          )}
         >
           <div className="w-full flex items-center text-ellipsis">
-            <span className="text-neutral-700 mr-2">
-              {label ? `${label}: ` : ""}
-            </span>
+            {label ? (
+              <span className="text-neutral-700 mr-2">{label}: </span>
+            ) : null}
             {value && value.length > 0 ? (
               <span>
                 {value
@@ -119,7 +124,7 @@ export function Combobox<T extends Record<string, any>>({
           <ChevronDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-full p-0" align="start">
         <Command shouldFilter={false}>
           <CommandInput
             value={searchValue}
