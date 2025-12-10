@@ -27,6 +27,7 @@ export const listProducts = async ({
         size,
         search,
         status,
+        categoryId,
       }),
       {
         headers: {

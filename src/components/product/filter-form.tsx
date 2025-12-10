@@ -46,7 +46,7 @@ export const ProductFilterForm = ({ appliedFilters }: Props) => {
         name="search"
         containerClassName="w-64 h-9"
         value={filter.search}
-        placeholder="Input nama tipe pembayaran"
+        placeholder="Input nama produk"
         onChange={(e) => {
           setFilter((st) => ({
             ...st,
