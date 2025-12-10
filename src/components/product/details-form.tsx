@@ -6,7 +6,7 @@ import { FormHint } from "../shared/form-hint";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { CategoryCombobox } from "../shared/comboboxes/category";
-import { Textarea } from "../ui/text-area";
+import { Textarea } from "../ui/textarea";
 
 type FormState = {
   name: string;

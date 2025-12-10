@@ -72,6 +72,7 @@ export const ProductFilterForm = ({ appliedFilters }: Props) => {
         </SelectContent>
       </Select>
       <CategoryCombobox
+        className="w-[15rem]"
         label="Category"
         placeholder="Category"
         value={[filter.categoryId]}

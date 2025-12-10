@@ -31,6 +31,7 @@ export type ComboboxProps<T> = {
   label?: string;
   placeholder?: string;
   includeAllOption?: boolean;
+  className?: string;
   queryFn: (search: string) => Promise<Option<T>[]>;
   onValueChange: (value?: string[]) => void;
 };
@@ -41,13 +42,19 @@ export function Combobox<T extends Record<string, any>>({
   label,
   placeholder,
   includeAllOption = false,
+  className,
   queryFn,
   onValueChange,
 }: ComboboxProps<T>) {
   const [options, setOptions] = React.useState<Option<T>[]>([]);
+  const [selectedOptions, setSelectedOptions] = React.useState<Option<T>[]>([]);
   const [searchValue, setSearchValue] = React.useState("");
   const debouncedSearchValue = useDebounce(searchValue, 300);
   const [open, setOpen] = React.useState(false);
+  const initializedSelectedOptionsRef = React.useRef(false);
+  console.log("Rendered!");
+  console.log(selectedOptions);
+  console.log(value);
 
   React.useEffect(() => {
     const fetchAsync = async () => {
@@ -62,15 +69,29 @@ export function Combobox<T extends Record<string, any>>({
     fetchAsync();
   }, [queryFn, debouncedSearchValue, includeAllOption]);
 
-  const optionsMap = React.useMemo(() => {
+  // run once after options dan value ada.
+  React.useEffect(() => {
+    if (options.length > 0) {
+      if (!initializedSelectedOptionsRef.current) {
+        initializedSelectedOptionsRef.current = true;
+        setSelectedOptions(options.filter((o) => value.includes(o.value)));
+      }
+    }
+  }, [options, value]);
+
+  const availableOptionsWithSelectedOptions = React.useMemo(() => {
     const optionsMap: Record<string, string> = {};
 
     for (let i = 0; i < options.length; i++) {
       optionsMap[options[i].value] = options[i].label;
       // key: id, value: label
     }
+
+    for (let i = 0; i < selectedOptions.length; i++) {
+      optionsMap[selectedOptions[i].value] = selectedOptions[i].label;
+    }
     return optionsMap;
-  }, [options]);
+  }, [options, selectedOptions]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -79,14 +100,21 @@ export function Combobox<T extends Record<string, any>>({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between h-[2.5rem] border-neutral-400"
+          className={cn(
+            "w-full justify-between h-[2.5rem] border-neutral-400",
+            className
+          )}
         >
-          <div className="w-full flex items-center">
-            <span className="text-neutral-700 mr-2">
-              {label ? `${label}: ` : ""}
-            </span>
+          <div className="w-full flex items-center text-ellipsis">
+            {label ? (
+              <span className="text-neutral-700 mr-2">{label}: </span>
+            ) : null}
             {value && value.length > 0 ? (
-              <span>{value.map((id) => optionsMap[id]).join(", ")}</span>
+              <span>
+                {value
+                  .map((id) => availableOptionsWithSelectedOptions[id])
+                  .join(", ")}
+              </span>
             ) : (
               <span className="text-neutral-500 font-normal">
                 {placeholder}
@@ -96,7 +124,7 @@ export function Combobox<T extends Record<string, any>>({
           <ChevronDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-full p-0" align="start">
         <Command shouldFilter={false}>
           <CommandInput
             value={searchValue}
@@ -118,14 +146,35 @@ export function Combobox<T extends Record<string, any>>({
                   key={`option-${option.value}-${i}`}
                   value={option.value}
                   onSelect={(v) => {
-                    console.log(v);
+                    console.log("Click", v);
                     if (value.includes(v)) {
                       // jika value yang kita pilih ada di dalam currentValue, maka dia akan dikeluarkan dari currentValue
                       onValueChange(value.filter((s) => s !== v));
+                      setSelectedOptions(
+                        value
+                          .filter((s) => s !== v)
+                          .map((s) => ({
+                            value: s,
+                            label: availableOptionsWithSelectedOptions[s],
+                          }))
+                      );
                     } else if (v !== "all") {
-                      onValueChange([...value, v]);
+                      onValueChange([...value.filter((v) => v !== "all"), v]);
+                      setSelectedOptions(
+                        [...value.filter((v) => v !== "all"), v].map((s) => ({
+                          value: s,
+                          label: availableOptionsWithSelectedOptions[s],
+                        }))
+                      );
                     } else {
+                      console.log("MASUK KE SINI");
                       onValueChange([v]);
+                      setSelectedOptions(
+                        [v].map((s) => ({
+                          value: s,
+                          label: availableOptionsWithSelectedOptions[s],
+                        }))
+                      );
                     }
                   }}
                 >
