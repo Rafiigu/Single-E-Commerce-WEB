@@ -21,3 +21,11 @@ export type MutateCategoryDTO = {
 export type MutatePaymentTermDTO = {
   name: string;
 };
+
+export type MutateProductDTO = {
+  name: string;
+  price: number;
+  categoryId: string;
+  description: string;
+  fileName: string;
+};
