@@ -3,8 +3,8 @@
 import { Product } from "@/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { updateCategory } from "@/actions/category/update-category";
 import { ProductDetailsForm } from "./details-form";
+import { updateProduct } from "@/actions/product/update-product";
 
 type Props = {
   product: Product;
@@ -19,7 +19,7 @@ export const ProductEditForm = ({ product }: Props) => {
       product={product}
       errorFields={errorFields}
       action={async (formState) => {
-        const { data, error, errorFields } = await updateCategory({
+        const { data, error, errorFields } = await updateProduct({
           id: product.id,
           data: formState,
         });

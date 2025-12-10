@@ -39,7 +39,7 @@ export const ProductFilterForm = ({ appliedFilters }: Props) => {
           searchParams.set(key, value);
         });
 
-        router.push(`/product${searchParams.toString()}`);
+        router.push(`/product?${searchParams.toString()}`);
       }}
     >
       <Input
