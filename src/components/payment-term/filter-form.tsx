@@ -26,6 +26,10 @@ export const PaymentTermFilterForm = ({ appliedFilters }: Props) => {
     search: appliedFilters.search || "",
     status: appliedFilters.status || "all",
   });
+
+  console.log(appliedFilters.search);
+  console.log(!appliedFilters.search);
+
   return (
     <form
       className="flex flex-row justify-start items-center gap-x-4"
@@ -52,7 +56,9 @@ export const PaymentTermFilterForm = ({ appliedFilters }: Props) => {
         }}
       />
       <Select
+        value={filter.status}
         onValueChange={(v) => {
+          console.log(v);
           setFilter((st) => ({
             ...st,
             status: v,
@@ -71,6 +77,18 @@ export const PaymentTermFilterForm = ({ appliedFilters }: Props) => {
       <Button className="size-9">
         <SearchIcon />
       </Button>
+      {appliedFilters.search !== undefined &&
+      (appliedFilters.search !== "" || appliedFilters.status !== "all") ? (
+        <Button
+          variant="outline"
+          onClick={() => {
+            setFilter({ search: "", status: "all" });
+            router.push(`payment-term`);
+          }}
+        >
+          Hapus Filter
+        </Button>
+      ) : null}
     </form>
   );
 };

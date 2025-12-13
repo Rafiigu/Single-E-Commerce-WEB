@@ -60,7 +60,7 @@ export function Table<T extends Record<string, any>>({
                 <td
                   key={`#table-row-${i}-cell-${j}`}
                   className={cn(
-                    "border-b border-l px-2.5 py-1.5 text-sm text-neutral-500",
+                    "border-b border-l px-2.5 h-11 text-sm text-neutral-500",
                     {
                       "border-r":
                         j === Object.entries(headers).length - 1 &&

@@ -79,6 +79,9 @@ export const AdminAccountTable = ({ accounts, page, total }: Props) => {
         status: "min-w-[120px] w-[120px]",
       }}
       renderActionColumn={(row) => {
+        if (row.role === "superadmin") {
+          return null;
+        }
         return (
           <Popover>
             <PopoverTrigger asChild>

@@ -53,6 +53,7 @@ export const ProductCategoryFilterForm = ({ appliedFilters }: Props) => {
         }}
       />
       <Select
+        value={filter.status}
         onValueChange={(v) => {
           setFilter((st) => ({
             ...st,
@@ -72,6 +73,18 @@ export const ProductCategoryFilterForm = ({ appliedFilters }: Props) => {
       <Button className="size-9">
         <SearchIcon />
       </Button>
+      {appliedFilters.search !== undefined &&
+      (appliedFilters.search !== "" || appliedFilters.status !== "all") ? (
+        <Button
+          variant="outline"
+          onClick={() => {
+            setFilter({ search: "", status: "all" });
+            router.push(`caategory`);
+          }}
+        >
+          Hapus Filter
+        </Button>
+      ) : null}
     </form>
   );
 };
