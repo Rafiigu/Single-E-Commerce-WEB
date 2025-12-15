@@ -35,6 +35,7 @@ export const ProductTable = ({ products, page, total }: Props) => {
       total={total}
       page={page}
       headers={{
+        imageFileName: "Gambar",
         name: "Nama",
         price: "Harga",
         stock: "Stok",
@@ -43,6 +44,16 @@ export const ProductTable = ({ products, page, total }: Props) => {
         status: "Status",
       }}
       render={{
+        imageFileName(val) {
+          return val ? (
+            <img
+              src={`${process.env.API_URL}/product/file/${val}`}
+              className="size-10"
+            />
+          ) : (
+            <div className="bg-neutral-400 size-10"></div>
+          );
+        },
         name(val) {
           return <span className="text-neutral-900">{val}</span>;
         },

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { ProductDetailsForm } from "./details-form";
 import { useState } from "react";
 import { createProduct } from "@/actions/product/create-product";
+import { uploadProductImage } from "@/actions/product/upload-product-image";
 
 export const ProductCreateForm = () => {
   const router = useRouter();
@@ -12,8 +13,31 @@ export const ProductCreateForm = () => {
     <ProductDetailsForm
       errorFields={errorFields}
       action={async (formState) => {
+        let fileName = "";
+        if (formState.file) {
+          const formData = new FormData();
+          formData.set("file", formState.file);
+          const { data, error, errorFields } = await uploadProductImage({
+            data: formData,
+          });
+
+          if (errorFields !== null) {
+            setErrorFields(errorFields);
+            return;
+          } else if (error) {
+            alert(error);
+            return;
+          } else {
+            fileName = data?.filename || "";
+          }
+        }
+
+        console.log(`BANGSAT: ${fileName}`);
         const { data, error, errorFields } = await createProduct({
-          data: formState,
+          data: {
+            ...formState,
+            fileName,
+          },
         });
 
         if (errorFields !== null) {

@@ -7,12 +7,14 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { CategoryCombobox } from "../shared/comboboxes/category";
 import { Textarea } from "../ui/textarea";
+import { uploadProductImage } from "@/actions/product/upload-product-image";
 
 type FormState = {
   name: string;
   price: string;
   categoryId: string;
   description: string;
+  file?: File;
   fileName: string;
 };
 
@@ -21,6 +23,7 @@ type ParsedFormState = {
   price: number;
   categoryId: string;
   description: string;
+  file?: File;
   fileName: string;
 };
 
@@ -46,7 +49,7 @@ export const ProductDetailsForm = ({
   return (
     <form
       className="w-full flex flex-col max-w-[41.5rem] mx-auto gap-y-6"
-      action={() => {
+      action={async () => {
         action({
           ...formState,
           price: formState.price ? parseInt(formState.price) : 0,
@@ -116,6 +119,25 @@ export const ProductDetailsForm = ({
               ...st,
               description: e.target.value,
             }));
+          }}
+        />
+      </FormHint>
+      <FormHint
+        label="Gambar"
+        description="Gambar dari produk."
+        errorMessage={errorFields.file}
+      >
+        <Input
+          name="file"
+          placeholder="Input file"
+          type="file"
+          onChange={(e) => {
+            if (e.target.files && e.target.files[0]) {
+              setFormState((st) => ({
+                ...st,
+                file: e.target.files?.[0],
+              }));
+            }
           }}
         />
       </FormHint>
