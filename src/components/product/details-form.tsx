@@ -8,12 +8,14 @@ import { Button } from "../ui/button";
 import { CategoryCombobox } from "../shared/comboboxes/category";
 import { Textarea } from "../ui/textarea";
 import { uploadProductImage } from "@/actions/product/upload-product-image";
+import { getProxiedDownloadUrl } from "@/lib/download/get-proxied-download-url";
 
 type FormState = {
   name: string;
   price: string;
   categoryId: string;
   description: string;
+  fileURL?: string;
   file?: File;
   fileName: string;
 };
@@ -43,6 +45,9 @@ export const ProductDetailsForm = ({
     price: product?.price ? String(product?.price) : "",
     categoryId: product?.category.id || "",
     description: product?.description || "",
+    fileURL: product?.imageFileName
+      ? getProxiedDownloadUrl(`/product/file/${product.imageFileName}`)
+      : "",
     fileName: product?.imageFileName || "",
   });
 
@@ -122,24 +127,26 @@ export const ProductDetailsForm = ({
           }}
         />
       </FormHint>
-      <FormHint
-        label="Gambar"
-        description="Gambar dari produk."
-        errorMessage={errorFields.file}
-      >
+      <FormHint label="Gambar" description="Gambar dari produk.">
         <Input
+          errorMessage={errorFields.fileName}
           name="file"
           placeholder="Input file"
           type="file"
           onChange={(e) => {
             if (e.target.files && e.target.files[0]) {
+              const file = e.target.files?.[0];
               setFormState((st) => ({
                 ...st,
-                file: e.target.files?.[0],
+                file,
+                fileURL: URL.createObjectURL(file),
               }));
             }
           }}
         />
+        {formState.fileURL ? (
+          <img className="mt-2" src={formState.fileURL} />
+        ) : null}
       </FormHint>
       <Button className="w-fit ml-auto" type="submit">
         Submit

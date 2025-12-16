@@ -32,7 +32,6 @@ export const ProductCreateForm = () => {
           }
         }
 
-        console.log(`BANGSAT: ${fileName}`);
         const { data, error, errorFields } = await createProduct({
           data: {
             ...formState,

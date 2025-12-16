@@ -20,6 +20,7 @@ import {
 import { deactivateProduct } from "@/actions/product/deactivate-product";
 import { activateProduct } from "@/actions/product/activate-product";
 import { Badge, BadgeVariants } from "../ui/badge";
+import { getProxiedDownloadUrl } from "@/lib/download/get-proxied-download-url";
 
 type Props = {
   products: Product[];
@@ -47,7 +48,7 @@ export const ProductTable = ({ products, page, total }: Props) => {
         imageFileName(val) {
           return val ? (
             <img
-              src={`${process.env.API_URL}/product/file/${val}`}
+              src={getProxiedDownloadUrl(`/product/file/${val}`)}
               className="size-10"
             />
           ) : (
