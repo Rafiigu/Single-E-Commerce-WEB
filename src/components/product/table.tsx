@@ -21,6 +21,7 @@ import { deactivateProduct } from "@/actions/product/deactivate-product";
 import { activateProduct } from "@/actions/product/activate-product";
 import { Badge, BadgeVariants } from "../ui/badge";
 import { getProxiedDownloadUrl } from "@/lib/download/get-proxied-download-url";
+import { useState } from "react";
 
 type Props = {
   products: Product[];
@@ -30,6 +31,7 @@ type Props = {
 
 export const ProductTable = ({ products, page, total }: Props) => {
   const router = useRouter();
+  const [open, setOpen] = useState(false);
   return (
     <Table
       data={products}
@@ -47,10 +49,25 @@ export const ProductTable = ({ products, page, total }: Props) => {
       render={{
         imageFileName(val) {
           return val ? (
-            <img
-              src={getProxiedDownloadUrl(`/product/file/${val}`)}
-              className="size-10"
-            />
+            <>
+              <img
+                onClick={() => setOpen(true)}
+                src={getProxiedDownloadUrl(`/product/file/${val}`)}
+                className="size-10 cursor-pointer"
+              />
+              <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTitle></DialogTitle>
+                <DialogContent
+                  showCloseButton={false}
+                  className="flex items-center justify-center h-100 w-100 p-0 bg-transparent border-none shadow-none"
+                >
+                  <img
+                    src={getProxiedDownloadUrl(`/product/file/${val}`)}
+                    className="h-full w-full rounded-lg"
+                  />
+                </DialogContent>
+              </Dialog>
+            </>
           ) : (
             <div className="bg-neutral-400 size-10"></div>
           );
@@ -59,7 +76,16 @@ export const ProductTable = ({ products, page, total }: Props) => {
           return <span className="text-neutral-900">{val}</span>;
         },
         price(val) {
-          return <span className="text-neutral-900">{val}</span>;
+          const formatter = new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 2,
+          });
+
+          const formatted = formatter.format(val).replace(/^Rp\s?/, "Rp");
+
+          console.log(formatted);
+          return <span className="text-neutral-900">{formatted}</span>;
         },
         stock(val) {
           return <span className="text-neutral-900">{val}</span>;
