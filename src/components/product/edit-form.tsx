@@ -20,7 +20,7 @@ export const ProductEditForm = ({ product }: Props) => {
       product={product}
       errorFields={errorFields}
       action={async (formState) => {
-        let fileName = "";
+        let fileName = formState.fileName;
         if (formState.file) {
           const formData = new FormData();
           formData.set("file", formState.file);

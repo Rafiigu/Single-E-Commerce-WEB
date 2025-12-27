@@ -32,6 +32,12 @@ type Props = {
 export const ProductTable = ({ products, page, total }: Props) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const handleClick = (image: string) => {
+    setSelectedImage(image);
+    setOpen(true);
+  };
   return (
     <Table
       data={products}
@@ -51,7 +57,7 @@ export const ProductTable = ({ products, page, total }: Props) => {
           return val ? (
             <>
               <img
-                onClick={() => setOpen(true)}
+                onClick={() => handleClick(val)}
                 src={getProxiedDownloadUrl(`/product/file/${val}`)}
                 className="size-10 cursor-pointer"
               />
@@ -61,10 +67,14 @@ export const ProductTable = ({ products, page, total }: Props) => {
                   showCloseButton={false}
                   className="flex items-center justify-center h-100 w-100 p-0 bg-transparent border-none shadow-none"
                 >
-                  <img
-                    src={getProxiedDownloadUrl(`/product/file/${val}`)}
-                    className="h-full w-full rounded-lg"
-                  />
+                  {selectedImage && (
+                    <img
+                      src={getProxiedDownloadUrl(
+                        `/product/file/${selectedImage}`
+                      )}
+                      className="h-full w-full rounded-lg"
+                    />
+                  )}
                 </DialogContent>
               </Dialog>
             </>
