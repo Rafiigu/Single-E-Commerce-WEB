@@ -48,4 +48,5 @@ export type Product = {
   category: Pick<Category, "id" | "name">;
   createdAt: string;
   updatedAt: string;
+  productImages: { imageFileName: string }[];
 };

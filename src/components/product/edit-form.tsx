@@ -20,10 +20,10 @@ export const ProductEditForm = ({ product }: Props) => {
       product={product}
       errorFields={errorFields}
       action={async (formState) => {
-        let fileName = formState.fileName;
-        if (formState.file) {
+        if (formState.files && formState.files.length > 0) {
           const formData = new FormData();
-          formData.set("file", formState.file);
+          formState.files.forEach((file) => formData.append("files", file));
+
           const { data, error, errorFields } = await uploadProductImage({
             data: formData,
           });
@@ -34,17 +34,12 @@ export const ProductEditForm = ({ product }: Props) => {
           } else if (error) {
             alert(error);
             return;
-          } else {
-            fileName = data?.filename || "";
           }
         }
 
         const { data, error, errorFields } = await updateProduct({
           id: product.id,
-          data: {
-            ...formState,
-            fileName,
-          },
+          data: formState, 
         });
 
         if (errorFields !== null) {

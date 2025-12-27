@@ -9,7 +9,7 @@ type Props<T> = {
   headers: Partial<Record<keyof T, string>>;
   minWidths: Partial<Record<keyof T, string>>;
   render?: Partial<{
-    [key in keyof T]: (val: T[key]) => ReactNode;
+    [key in keyof T]: (val: T[key], row: T) => ReactNode;
   }>;
   renderActionColumn?: (row: T) => ReactNode;
 };
@@ -24,6 +24,7 @@ export function Table<T extends Record<string, any>>({
   renderActionColumn,
   minWidths,
 }: Props<T>) {
+  console.log(data);
   return (
     <div className="w-full">
       <table className="w-full border-separate border-spacing-0">
@@ -73,7 +74,7 @@ export function Table<T extends Record<string, any>>({
                     }
                   )}
                 >
-                  {render[k] ? render[k](d[k]) : d[k] || "-"}
+                  {render[k] ? render[k](d[k], d) : d[k] || "-"}
                 </td>
               ))}
               {renderActionColumn ? (

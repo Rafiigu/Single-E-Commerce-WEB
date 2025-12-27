@@ -7,7 +7,6 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { CategoryCombobox } from "../shared/comboboxes/category";
 import { Textarea } from "../ui/textarea";
-import { uploadProductImage } from "@/actions/product/upload-product-image";
 import { getProxiedDownloadUrl } from "@/lib/download/get-proxied-download-url";
 
 type FormState = {
@@ -15,9 +14,8 @@ type FormState = {
   price: string;
   categoryId: string;
   description: string;
-  fileURL?: string;
-  file?: File;
-  fileName: string;
+  files: File[];
+  fileURLs: string[];
 };
 
 type ParsedFormState = {
@@ -25,8 +23,7 @@ type ParsedFormState = {
   price: number;
   categoryId: string;
   description: string;
-  file?: File;
-  fileName: string;
+  files?: File[];
 };
 
 type Props = {
@@ -42,13 +39,14 @@ export const ProductDetailsForm = ({
 }: Props) => {
   const [formState, setFormState] = useState<FormState>({
     name: product?.name || "",
-    price: product?.price ? String(product?.price) : "",
+    price: product?.price ? String(product.price) : "",
     categoryId: product?.category.id || "",
     description: product?.description || "",
-    fileURL: product?.imageFileName
-      ? getProxiedDownloadUrl(`/product/file/${product.imageFileName}`)
-      : "",
-    fileName: product?.imageFileName || "",
+    files: [],
+    fileURLs:
+      product?.productImages?.map((img) =>
+        getProxiedDownloadUrl(`/product/file/${img.imageFileName}`)
+      ) || [],
   });
 
   return (
@@ -58,6 +56,7 @@ export const ProductDetailsForm = ({
         action({
           ...formState,
           price: formState.price ? parseInt(formState.price) : 0,
+          files: formState.files,
         });
       }}
     >
@@ -70,14 +69,12 @@ export const ProductDetailsForm = ({
           name="name"
           placeholder="Input nama"
           value={formState.name}
-          onChange={(e) => {
-            setFormState((st) => ({
-              ...st,
-              name: e.target.value,
-            }));
-          }}
+          onChange={(e) =>
+            setFormState((st) => ({ ...st, name: e.target.value }))
+          }
         />
       </FormHint>
+
       <FormHint
         label="Harga"
         description="Harga dari produk."
@@ -87,14 +84,12 @@ export const ProductDetailsForm = ({
           name="price"
           placeholder="Input harga"
           value={formState.price}
-          onChange={(e) => {
-            setFormState((st) => ({
-              ...st,
-              price: e.target.value,
-            }));
-          }}
+          onChange={(e) =>
+            setFormState((st) => ({ ...st, price: e.target.value }))
+          }
         />
       </FormHint>
+
       <FormHint
         label="Kategori"
         description="Kategori dari produk."
@@ -102,14 +97,12 @@ export const ProductDetailsForm = ({
       >
         <CategoryCombobox
           value={formState.categoryId ? [formState.categoryId] : []}
-          onValueChange={(val) => {
-            setFormState((st) => ({
-              ...st,
-              categoryId: val?.at(-1) || "",
-            }));
-          }}
+          onValueChange={(val) =>
+            setFormState((st) => ({ ...st, categoryId: val?.at(-1) || "" }))
+          }
         />
       </FormHint>
+
       <FormHint
         label="Deskripsi"
         description="Deskripsi dari produk."
@@ -119,35 +112,42 @@ export const ProductDetailsForm = ({
           name="description"
           placeholder="Input deskripsi"
           value={formState.description}
-          onChange={(e) => {
-            setFormState((st) => ({
-              ...st,
-              description: e.target.value,
-            }));
-          }}
+          onChange={(e) =>
+            setFormState((st) => ({ ...st, description: e.target.value }))
+          }
         />
       </FormHint>
+
       <FormHint label="Gambar" description="Gambar dari produk.">
         <Input
-          errorMessage={errorFields.fileName}
-          name="file"
-          placeholder="Input file"
           type="file"
+          multiple
           onChange={(e) => {
-            if (e.target.files && e.target.files[0]) {
-              const file = e.target.files?.[0];
+            if (e.target.files) {
+              const selectedFiles = Array.from(e.target.files);
               setFormState((st) => ({
                 ...st,
-                file,
-                fileURL: URL.createObjectURL(file),
+                files: selectedFiles,
+                fileURLs: selectedFiles.map((file) =>
+                  URL.createObjectURL(file)
+                ),
               }));
             }
           }}
         />
-        {formState.fileURL ? (
-          <img className="mt-2" src={formState.fileURL} />
-        ) : null}
+        {formState.fileURLs.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-2">
+            {formState.fileURLs.map((url, i) => (
+              <img
+                key={i}
+                src={url}
+                className="h-24 w-24 object-cover rounded"
+              />
+            ))}
+          </div>
+        )}
       </FormHint>
+
       <Button className="w-fit ml-auto" type="submit">
         Submit
       </Button>

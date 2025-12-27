@@ -32,7 +32,7 @@ export const uploadProductImage = async ({ data }: { data: FormData }) => {
         filename: string;
         path: string;
         size: number;
-      },
+      }[],
       error: null,
       errorFields: null,
     };

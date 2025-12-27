@@ -31,13 +31,8 @@ type Props = {
 
 export const ProductTable = ({ products, page, total }: Props) => {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [openRowId, setOpenRowId] = useState<string | null>(null);
 
-  const handleClick = (image: string) => {
-    setSelectedImage(image);
-    setOpen(true);
-  };
   return (
     <Table
       data={products}
@@ -53,33 +48,44 @@ export const ProductTable = ({ products, page, total }: Props) => {
         status: "Status",
       }}
       render={{
-        imageFileName(val) {
-          return val ? (
+        imageFileName(_, row) {
+          const images = row.productImages ?? [];
+          const fileNames = images.map((img) => img.imageFileName);
+
+          if (images.length === 0) {
+            return <div className="bg-neutral-400 size-10" />;
+          }
+
+          return (
             <>
               <img
-                onClick={() => handleClick(val)}
-                src={getProxiedDownloadUrl(`/product/file/${val}`)}
-                className="size-10 cursor-pointer"
+                onClick={() => setOpenRowId(row.id)}
+                src={getProxiedDownloadUrl(
+                  `/product/file/${images[0].imageFileName}`
+                )}
+                className="size-10 object-cover cursor-pointer rounded"
               />
-              <Dialog open={open} onOpenChange={setOpen}>
+
+              <Dialog
+                open={openRowId === row.id}
+                onOpenChange={(isOpen) => !isOpen && setOpenRowId(null)}
+              >
                 <DialogTitle></DialogTitle>
-                <DialogContent
-                  showCloseButton={false}
-                  className="flex items-center justify-center h-100 w-100 p-0 bg-transparent border-none shadow-none"
-                >
-                  {selectedImage && (
-                    <img
-                      src={getProxiedDownloadUrl(
-                        `/product/file/${selectedImage}`
-                      )}
-                      className="h-full w-full rounded-lg"
-                    />
-                  )}
+                <DialogContent showCloseButton={false} className="max-w-4xl">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-h-[70vh] overflow-y-auto">
+                    {images.map((img, index) => (
+                      <img
+                        key={index}
+                        src={getProxiedDownloadUrl(
+                          `/product/file/${img.imageFileName}`
+                        )}
+                        className="w-full h-40 object-cover rounded"
+                      />
+                    ))}
+                  </div>
                 </DialogContent>
               </Dialog>
             </>
-          ) : (
-            <div className="bg-neutral-400 size-10"></div>
           );
         },
         name(val) {
@@ -94,7 +100,6 @@ export const ProductTable = ({ products, page, total }: Props) => {
 
           const formatted = formatter.format(val).replace(/^Rp\s?/, "Rp");
 
-          console.log(formatted);
           return <span className="text-neutral-900">{formatted}</span>;
         },
         stock(val) {

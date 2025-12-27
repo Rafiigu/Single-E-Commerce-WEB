@@ -13,33 +13,34 @@ export const ProductCreateForm = () => {
     <ProductDetailsForm
       errorFields={errorFields}
       action={async (formState) => {
-        let fileName = "";
-        if (formState.file) {
+        if (formState.files && formState.files.length > 0) {
           const formData = new FormData();
-          formData.set("file", formState.file);
+          formState.files.forEach((file) => formData.append("files", file));
+
           const { data, error, errorFields } = await uploadProductImage({
             data: formData,
           });
 
-          if (errorFields !== null) {
+          if (errorFields) {
             setErrorFields(errorFields);
             return;
           } else if (error) {
-            alert(error);
+            console.log(error);
             return;
-          } else {
-            fileName = data?.filename || "";
           }
         }
 
         const { data, error, errorFields } = await createProduct({
           data: {
-            ...formState,
-            fileName,
+            name: formState.name,
+            price: formState.price,
+            categoryId: formState.categoryId,
+            fileName: "",
+            description: formState.description,
           },
         });
 
-        if (errorFields !== null) {
+        if (errorFields) {
           setErrorFields(errorFields);
         } else if (error) {
           alert(error);

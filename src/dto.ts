@@ -27,5 +27,5 @@ export type MutateProductDTO = {
   price: number;
   categoryId: string;
   description: string;
-  fileName: string;
+  fileName?: string;
 };
