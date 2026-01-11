@@ -19,11 +19,11 @@ export const uploadProductImage = async ({ data }: { data: FormData }) => {
       return {
         data: null,
         error: response.error.message || null,
-        errorFields: response.errror.fields || null,
+        errorFields: response.error.fields || null,
       };
     }
     return {
-      data: response.data.file as {
+      data: response.data.files as {
         fieldname: string;
         originalname: string;
         encoding: string;

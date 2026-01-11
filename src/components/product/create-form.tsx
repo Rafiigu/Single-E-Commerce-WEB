@@ -13,6 +13,8 @@ export const ProductCreateForm = () => {
     <ProductDetailsForm
       errorFields={errorFields}
       action={async (formState) => {
+        let uploadedFiles: { imageFileName: string }[] = [];
+
         if (formState.files && formState.files.length > 0) {
           const formData = new FormData();
           formState.files.forEach((file) => formData.append("files", file));
@@ -28,6 +30,13 @@ export const ProductCreateForm = () => {
             console.log(error);
             return;
           }
+
+          console.log("here", data);
+          if (data) {
+            uploadedFiles = data.map((f) => ({
+              imageFileName: f.filename,
+            }));
+          }
         }
 
         const { data, error, errorFields } = await createProduct({
@@ -35,7 +44,7 @@ export const ProductCreateForm = () => {
             name: formState.name,
             price: formState.price,
             categoryId: formState.categoryId,
-            fileName: "",
+            fileNames: uploadedFiles,
             description: formState.description,
           },
         });

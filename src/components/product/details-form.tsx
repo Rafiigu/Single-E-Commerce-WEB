@@ -14,8 +14,6 @@ type FormState = {
   price: string;
   categoryId: string;
   description: string;
-  files: File[];
-  fileURLs: string[];
 };
 
 type ParsedFormState = {
@@ -24,6 +22,7 @@ type ParsedFormState = {
   categoryId: string;
   description: string;
   files?: File[];
+  deletedImages?: string[];
 };
 
 type Props = {
@@ -31,6 +30,10 @@ type Props = {
   action: (formState: ParsedFormState) => void;
   product?: Product | null;
 };
+
+type ImageItem =
+  | { type: "existing"; fileName: string; url: string }
+  | { type: "new"; file: File; url: string };
 
 export const ProductDetailsForm = ({
   errorFields = {},
@@ -42,21 +45,64 @@ export const ProductDetailsForm = ({
     price: product?.price ? String(product.price) : "",
     categoryId: product?.category.id || "",
     description: product?.description || "",
-    files: [],
-    fileURLs:
-      product?.productImages?.map((img) =>
-        getProxiedDownloadUrl(`/product/file/${img.imageFileName}`)
-      ) || [],
   });
+
+  const [images, setImages] = useState<ImageItem[]>(
+    () =>
+      product?.productImages?.map((img) => ({
+        type: "existing",
+        fileName: img.imageFileName,
+        url: getProxiedDownloadUrl(`/product/file/${img.imageFileName}`),
+      })) || []
+  );
+
+  const [markedForDeletion, setMarkedForDeletion] = useState<number[]>([]);
+  const [confirmedDeleted, setConfirmedDeleted] = useState<string[]>([]);
+
+  const handleImageClick = (i: number) => {
+    setMarkedForDeletion((prev) =>
+      prev.includes(i) ? prev.filter((idx) => idx !== i) : [...prev, i]
+    );
+  };
+
+  const existingImages =
+    product?.productImages?.map((img) => img.imageFileName) ?? [];
+
+  const confirmDeletion = () => {
+    setConfirmedDeleted((prev) => [
+      ...prev,
+      ...markedForDeletion
+        .map((i) => images[i])
+        .filter(
+          (img): img is { type: "existing"; fileName: string; url: string } =>
+            img.type === "existing"
+        )
+        .map((img) => img.fileName),
+    ]);
+
+    setImages((prev) =>
+      prev.filter((_, idx) => !markedForDeletion.includes(idx))
+    );
+
+    setMarkedForDeletion([]);
+  };
 
   return (
     <form
       className="w-full flex flex-col max-w-[41.5rem] mx-auto gap-y-6"
       action={async () => {
+        const newFiles = images
+          .filter(
+            (img): img is { type: "new"; file: File; url: string } =>
+              img.type === "new"
+          )
+          .map((img) => img.file);
+
         action({
           ...formState,
           price: formState.price ? parseInt(formState.price) : 0,
-          files: formState.files,
+          files: newFiles,
+          deletedImages: confirmedDeleted,
         });
       }}
     >
@@ -123,28 +169,73 @@ export const ProductDetailsForm = ({
           type="file"
           multiple
           onChange={(e) => {
-            if (e.target.files) {
-              const selectedFiles = Array.from(e.target.files);
-              setFormState((st) => ({
-                ...st,
-                files: selectedFiles,
-                fileURLs: selectedFiles.map((file) =>
-                  URL.createObjectURL(file)
-                ),
-              }));
-            }
+            const files = e.target.files;
+            if (!files) return;
+
+            setImages((prev) => [
+              ...prev,
+              ...Array.from(files).map((file) => ({
+                type: "new" as "new",
+                file,
+                url: URL.createObjectURL(file),
+              })),
+            ]);
           }}
         />
-        {formState.fileURLs.length > 0 && (
+        {images.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-2">
-            {formState.fileURLs.map((url, i) => (
-              <img
-                key={i}
-                src={url}
-                className="h-24 w-24 object-cover rounded"
-              />
-            ))}
+            {images.map((img, i) => {
+              const isMarked = markedForDeletion.includes(i);
+
+              const isConfirmed =
+                img.type === "existing" &&
+                confirmedDeleted.includes(img.fileName);
+
+              return (
+                <div
+                  key={i}
+                  className={`relative h-24 w-24 rounded overflow-hidden cursor-pointer
+                  ${isMarked ? "opacity-50 border-2 border-gray-400" : ""}
+                  ${isConfirmed ? "opacity-30 border-2 border-red-700" : ""}`}
+                  onClick={() => {
+                    if (isConfirmed) return;
+                    handleImageClick(i);
+                  }}
+                >
+                  <img src={img.url} className="h-full w-full object-cover" />
+                  {isMarked && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 text-white text-xs">
+                      Pending deletion
+                    </div>
+                  )}
+
+                  {isConfirmed && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white text-xs">
+                      Will be deleted
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+
+            <button
+              type="button"
+              className="h-24 w-24 flex items-center justify-center border-2 border-dashed rounded text-gray-500"
+              onClick={() =>
+                document
+                  .querySelector<HTMLInputElement>('input[type="file"]')
+                  ?.click()
+              }
+            >
+              +
+            </button>
           </div>
+        )}
+
+        {markedForDeletion.length > 0 && (
+          <Button type="button" className="mt-3" onClick={confirmDeletion}>
+            Confirm Deletion
+          </Button>
         )}
       </FormHint>
 
