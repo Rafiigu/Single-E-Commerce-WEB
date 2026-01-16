@@ -183,58 +183,60 @@ export const ProductDetailsForm = ({
             ]);
           }}
         />
-        {images.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-2">
-            {images.map((img, i) => {
-              const isMarked = markedForDeletion.includes(i);
+        <div className="flex flex-wrap gap-2 mt-2">
+          {images.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-2">
+              {images.map((img, i) => {
+                const isMarked = markedForDeletion.includes(i);
 
-              const isConfirmed =
-                img.type === "existing" &&
-                confirmedDeleted.includes(img.fileName);
+                const isConfirmed =
+                  img.type === "existing" &&
+                  confirmedDeleted.includes(img.fileName);
 
-              return (
-                <div
-                  key={i}
-                  className={`relative h-24 w-24 rounded overflow-hidden cursor-pointer
+                return (
+                  <div
+                    key={i}
+                    className={`relative h-24 w-24 rounded overflow-hidden cursor-pointer
                   ${isMarked ? "opacity-50 border-2 border-gray-400" : ""}
                   ${isConfirmed ? "opacity-30 border-2 border-red-700" : ""}`}
-                  onClick={() => {
-                    if (isConfirmed) return;
-                    handleImageClick(i);
-                  }}
-                >
-                  <img
-                    src={img.url}
-                    className="h-full w-full object-cover flex"
-                  />
-                  {isMarked && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 text-white text-xs text-center">
-                      Pending deletion
-                    </div>
-                  )}
+                    onClick={() => {
+                      if (isConfirmed) return;
+                      handleImageClick(i);
+                    }}
+                  >
+                    <img
+                      src={img.url}
+                      className="h-full w-full object-cover flex"
+                    />
+                    {isMarked && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/40 text-white text-xs text-center">
+                        Pending deletion
+                      </div>
+                    )}
 
-                  {isConfirmed && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white text-xs text-center">
-                      Will be deleted
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                    {isConfirmed && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white text-xs text-center">
+                        Will be deleted
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
 
-            <button
-              type="button"
-              className="h-24 w-24 flex items-center justify-center border-2 border-dashed rounded text-gray-500"
-              onClick={() =>
-                document
-                  .querySelector<HTMLInputElement>('input[type="file"]')
-                  ?.click()
-              }
-            >
-              +
-            </button>
-          </div>
-        )}
+          <button
+            type="button"
+            className="h-24 w-24 flex items-center justify-center border-2 border-dashed rounded text-gray-500"
+            onClick={() =>
+              document
+                .querySelector<HTMLInputElement>('input[type="file"]')
+                ?.click()
+            }
+          >
+            +
+          </button>
+        </div>
 
         {markedForDeletion.length > 0 && (
           <Button type="button" className="mt-3" onClick={confirmDeletion}>
