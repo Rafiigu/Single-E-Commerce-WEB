@@ -168,6 +168,7 @@ export const ProductDetailsForm = ({
         <Input
           type="file"
           multiple
+          className="hidden"
           onChange={(e) => {
             const files = e.target.files;
             if (!files) return;
@@ -202,15 +203,18 @@ export const ProductDetailsForm = ({
                     handleImageClick(i);
                   }}
                 >
-                  <img src={img.url} className="h-full w-full object-cover" />
+                  <img
+                    src={img.url}
+                    className="h-full w-full object-cover flex"
+                  />
                   {isMarked && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 text-white text-xs">
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 text-white text-xs text-center">
                       Pending deletion
                     </div>
                   )}
 
                   {isConfirmed && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white text-xs">
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white text-xs text-center">
                       Will be deleted
                     </div>
                   )}
