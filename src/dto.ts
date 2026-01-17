@@ -28,6 +28,7 @@ export type MutateProductDTO = {
   categoryId: string;
   description: string;
   fileNames?: { imageFileName: string }[];
+  deletedFileNames?: string[];
 };
 
 export type MutateProductImagesDTO = {

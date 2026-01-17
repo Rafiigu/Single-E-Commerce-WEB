@@ -57,7 +57,8 @@ export const ProductDetailsForm = ({
   );
 
   const [markedForDeletion, setMarkedForDeletion] = useState<number[]>([]);
-  const [confirmedDeleted, setConfirmedDeleted] = useState<string[]>([]);
+  // 🔄 CHANGED: removed confirmedDeleted state, replaced with deletedImages
+  const [deletedImages, setDeletedImages] = useState<string[]>([]);
 
   const handleImageClick = (i: number) => {
     setMarkedForDeletion((prev) =>
@@ -65,25 +66,20 @@ export const ProductDetailsForm = ({
     );
   };
 
-  const existingImages =
-    product?.productImages?.map((img) => img.imageFileName) ?? [];
-
+  // 🔄 CHANGED: confirmDeletion now updates deletedImages and removes from preview
   const confirmDeletion = () => {
-    setConfirmedDeleted((prev) => [
-      ...prev,
-      ...markedForDeletion
-        .map((i) => images[i])
-        .filter(
-          (img): img is { type: "existing"; fileName: string; url: string } =>
-            img.type === "existing"
-        )
-        .map((img) => img.fileName),
-    ]);
+    const toDelete = markedForDeletion
+      .map((i) => images[i])
+      .filter(
+        (img): img is { type: "existing"; fileName: string; url: string } =>
+          img.type === "existing"
+      )
+      .map((img) => img.fileName);
 
+    setDeletedImages((prev) => [...prev, ...toDelete]);
     setImages((prev) =>
       prev.filter((_, idx) => !markedForDeletion.includes(idx))
     );
-
     setMarkedForDeletion([]);
   };
 
@@ -102,7 +98,8 @@ export const ProductDetailsForm = ({
           ...formState,
           price: formState.price ? parseInt(formState.price) : 0,
           files: newFiles,
-          deletedImages: confirmedDeleted,
+          // 🔄 CHANGED: use deletedImages instead of confirmedDeleted
+          deletedImages,
         });
       }}
     >
@@ -176,33 +173,25 @@ export const ProductDetailsForm = ({
             setImages((prev) => [
               ...prev,
               ...Array.from(files).map((file) => ({
-                type: "new" as "new",
+                type: "new" as const,
                 file,
                 url: URL.createObjectURL(file),
               })),
             ]);
           }}
         />
-        <div className="flex flex-wrap gap-2 mt-2">
+        <div className="flex flex-wrap gap-x-2 mt-2 items-center content-center">
           {images.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-2">
+            <div className="flex flex-wrap gap-2">
               {images.map((img, i) => {
                 const isMarked = markedForDeletion.includes(i);
-
-                const isConfirmed =
-                  img.type === "existing" &&
-                  confirmedDeleted.includes(img.fileName);
 
                 return (
                   <div
                     key={i}
                     className={`relative h-24 w-24 rounded overflow-hidden cursor-pointer
-                  ${isMarked ? "opacity-50 border-2 border-gray-400" : ""}
-                  ${isConfirmed ? "opacity-30 border-2 border-red-700" : ""}`}
-                    onClick={() => {
-                      if (isConfirmed) return;
-                      handleImageClick(i);
-                    }}
+                  ${isMarked ? "opacity-50 border-2 border-gray-400" : ""}`}
+                    onClick={() => handleImageClick(i)}
                   >
                     <img
                       src={img.url}
@@ -213,12 +202,6 @@ export const ProductDetailsForm = ({
                         Pending deletion
                       </div>
                     )}
-
-                    {isConfirmed && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white text-xs text-center">
-                        Will be deleted
-                      </div>
-                    )}
                   </div>
                 );
               })}
@@ -227,7 +210,7 @@ export const ProductDetailsForm = ({
 
           <button
             type="button"
-            className="h-24 w-24 flex items-center justify-center border-2 border-dashed rounded text-gray-500"
+            className="h-24 w-24 overflow-hidden flex items-center justify-center border-2 border-dashed rounded text-gray-500"
             onClick={() =>
               document
                 .querySelector<HTMLInputElement>('input[type="file"]')
@@ -239,6 +222,7 @@ export const ProductDetailsForm = ({
         </div>
 
         {markedForDeletion.length > 0 && (
+          // 🔄 CHANGED: Confirm Deletion button kept, now calls updated confirmDeletion
           <Button type="button" className="mt-3" onClick={confirmDeletion}>
             Confirm Deletion
           </Button>

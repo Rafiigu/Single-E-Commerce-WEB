@@ -6,7 +6,6 @@ import { useState } from "react";
 import { ProductDetailsForm } from "./details-form";
 import { updateProduct } from "@/actions/product/update-product";
 import { uploadProductImage } from "@/actions/product/upload-product-image";
-import { deleteProductImages } from "@/actions/product/delete-product-image";
 
 type Props = {
   product: Product;
@@ -21,8 +20,6 @@ export const ProductEditForm = ({ product }: Props) => {
       product={product}
       errorFields={errorFields}
       action={async (formState) => {
-        console.log("Will be deleted Pictures", formState.deletedImages);
-        console.log("Will be uploaded Pictures", formState.files);
         let uploadedFiles: { imageFileName: string }[] = [];
         if (formState.files && formState.files.length > 0) {
           const formData = new FormData();
@@ -47,13 +44,6 @@ export const ProductEditForm = ({ product }: Props) => {
           }
         }
 
-        if (formState.deletedImages && formState.deletedImages.length > 0) {
-          const response = await deleteProductImages({
-            data: { fileNames: formState.deletedImages || [] },
-          });
-          console.log(response);
-        }
-
         const { data, error, errorFields } = await updateProduct({
           id: product.id,
           data: {
@@ -62,6 +52,7 @@ export const ProductEditForm = ({ product }: Props) => {
             categoryId: formState.categoryId,
             fileNames: uploadedFiles,
             description: formState.description,
+            deletedFileNames: formState.deletedImages || [],
           },
         });
 
