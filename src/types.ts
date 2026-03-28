@@ -50,3 +50,25 @@ export type Product = {
   updatedAt: string;
   productImages: { imageFileName: string }[];
 };
+
+export type TopUp = {
+  id: string;
+  nominal: number;
+  admin?: Pick<AdminAccount, "id" | "name">;
+  user: Pick<UserAccount, "id" | "name">;
+  proofOfTransferFileName: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  paymentAccount: Pick<PaymentAccount, "id" | "accountHolderName">;
+};
+
+export type PaymentAccount = {
+  id: String;
+  paymentTerm: Pick<PaymentTerm, "id" | "name">;
+  accountHolderName: String;
+  accountNumber: String;
+  status: String;
+  createdAt: string;
+  updatedAt: string;
+};

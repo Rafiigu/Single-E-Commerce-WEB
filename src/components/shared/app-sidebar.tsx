@@ -75,6 +75,18 @@ const groups = [
       },
     ],
   },
+  {
+    title: "Top Up",
+    accesses: ["superadmin", "admin"],
+    items: [
+      {
+        title: "Manajemen Top Up",
+        url: "/top-up",
+        icon: CreditCard,
+        accesses: ["superadmin", "admin"],
+      },
+    ],
+  },
 ];
 
 export function AppSidebar() {

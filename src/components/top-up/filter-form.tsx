@@ -9,23 +9,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { SearchIcon } from "lucide-react";
 
 type Props = {
   appliedFilters: {
-    search?: string;
     status?: string;
   };
 };
 
-export const ProductCategoryFilterForm = ({ appliedFilters }: Props) => {
+export const TopUpFilterForm = ({ appliedFilters }: Props) => {
   const router = useRouter();
   const [filter, setFilter] = useState({
-    search: appliedFilters.search || "",
     status: appliedFilters.status || "all",
   });
+
+  console.log("test", appliedFilters);
 
   return (
     <form
@@ -37,21 +36,9 @@ export const ProductCategoryFilterForm = ({ appliedFilters }: Props) => {
           searchParams.set(key, value);
         });
 
-        router.push(`/product-category?${searchParams.toString()}`);
+        router.push(`/top-up?${searchParams.toString()}`);
       }}
     >
-      <Input
-        name="search"
-        containerClassName="w-64 h-9"
-        value={filter.search}
-        placeholder="Input nama kategori produk"
-        onChange={(e) => {
-          setFilter((st) => ({
-            ...st,
-            search: e.target.value,
-          }));
-        }}
-      />
       <Select
         value={filter.status}
         onValueChange={(v) => {
@@ -66,20 +53,22 @@ export const ProductCategoryFilterForm = ({ appliedFilters }: Props) => {
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">Semua</SelectItem>
-          <SelectItem value="active">Aktif</SelectItem>
-          <SelectItem value="inactive">Non Aktif</SelectItem>
+          <SelectItem value="requested">Requested</SelectItem>
+          <SelectItem value="transferred">Transferred</SelectItem>
+          <SelectItem value="cancelled">Cancelled</SelectItem>
+          <SelectItem value="approved">Approved</SelectItem>
+          <SelectItem value="rejected">Rejected</SelectItem>
         </SelectContent>
       </Select>
       <Button className="size-9">
         <SearchIcon />
       </Button>
-      {appliedFilters.search !== undefined &&
-      (appliedFilters.search !== "" || appliedFilters.status !== "all") ? (
+      {appliedFilters.status && appliedFilters.status !== "all" ? (
         <Button
           variant="outline"
           onClick={() => {
-            setFilter({ search: "", status: "all" });
-            router.push(`category`);
+            setFilter({ status: "all" });
+            router.push(`top-up`);
           }}
         >
           Hapus Filter
