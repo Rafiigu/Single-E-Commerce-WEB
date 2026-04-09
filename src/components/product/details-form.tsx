@@ -57,7 +57,6 @@ export const ProductDetailsForm = ({
   );
 
   const [markedForDeletion, setMarkedForDeletion] = useState<number[]>([]);
-  // 🔄 CHANGED: removed confirmedDeleted state, replaced with deletedImages
   const [deletedImages, setDeletedImages] = useState<string[]>([]);
 
   const handleImageClick = (i: number) => {
@@ -66,7 +65,6 @@ export const ProductDetailsForm = ({
     );
   };
 
-  // 🔄 CHANGED: confirmDeletion now updates deletedImages and removes from preview
   const confirmDeletion = () => {
     const toDelete = markedForDeletion
       .map((i) => images[i])
@@ -98,7 +96,6 @@ export const ProductDetailsForm = ({
           ...formState,
           price: formState.price ? parseInt(formState.price) : 0,
           files: newFiles,
-          // 🔄 CHANGED: use deletedImages instead of confirmedDeleted
           deletedImages,
         });
       }}
@@ -222,7 +219,6 @@ export const ProductDetailsForm = ({
         </div>
 
         {markedForDeletion.length > 0 && (
-          // 🔄 CHANGED: Confirm Deletion button kept, now calls updated confirmDeletion
           <Button type="button" className="mt-3" onClick={confirmDeletion}>
             Confirm Deletion
           </Button>

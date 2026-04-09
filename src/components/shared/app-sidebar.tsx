@@ -14,7 +14,9 @@ import {
 } from "@/components/ui/sidebar";
 import {
   Blocks,
+  CircleDollarSign,
   CreditCard,
+  Landmark,
   LogOut,
   Package,
   UserRoundSearch,
@@ -73,6 +75,12 @@ const groups = [
         icon: CreditCard,
         accesses: ["superadmin"],
       },
+      {
+        title: "Manajemen Akun Pembayaran",
+        url: "/payment-account",
+        icon: Landmark,
+        accesses: ["superadmin"],
+      },
     ],
   },
   {
@@ -82,7 +90,7 @@ const groups = [
       {
         title: "Manajemen Top Up",
         url: "/top-up",
-        icon: CreditCard,
+        icon: CircleDollarSign,
         accesses: ["superadmin", "admin"],
       },
     ],

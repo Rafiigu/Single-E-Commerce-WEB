@@ -64,11 +64,11 @@ export type TopUp = {
 };
 
 export type PaymentAccount = {
-  id: String;
+  id: string;
   paymentTerm: Pick<PaymentTerm, "id" | "name">;
-  accountHolderName: String;
-  accountNumber: String;
-  status: String;
+  accountHolderName: string;
+  accountNumber: string;
+  status: string;
   createdAt: string;
   updatedAt: string;
 };

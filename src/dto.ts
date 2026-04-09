@@ -22,6 +22,12 @@ export type MutatePaymentTermDTO = {
   name: string;
 };
 
+export type MutatePaymentAccountDTO = {
+  accountHolderName: string;
+  paymentTermId: string;
+  accountNumber: string;
+};
+
 export type MutateProductDTO = {
   name: string;
   price: number;
