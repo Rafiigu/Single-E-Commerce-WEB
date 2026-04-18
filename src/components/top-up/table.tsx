@@ -50,6 +50,7 @@ export const TopUpTable = ({ topUps, page, total }: Props) => {
         proofOfTransferFileName: "Bukti Transfer",
         status: "Status",
         paymentAccount: "Nama Akun Tujuan",
+        createdAt: "Tanggal Top-Up",
       }}
       render={{
         nominal(val) {
@@ -119,14 +120,26 @@ export const TopUpTable = ({ topUps, page, total }: Props) => {
             <span className="text-neutral-900">{val?.accountHolderName}</span>
           );
         },
+        createdAt(val) {
+          return (
+            <span className="text-neutral-900">
+              {new Date(val).toLocaleDateString("id-ID", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              })}
+            </span>
+          );
+        },
       }}
       minWidths={{
         user: "w-[250px]",
         nominal: "w-[200px]",
         admin: "w-[250px]",
         status: "w-[120px]",
+        createdAt: "w-[150px]",
         proofOfTransferFileName: "w-[120px]",
-        paymentAccount: "w-[500px]",
+        paymentAccount: "w-[400px]",
       }}
       renderActionColumn={(topUp) => {
         if (topUp.status == "transferred") {

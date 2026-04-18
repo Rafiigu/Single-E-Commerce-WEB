@@ -9,11 +9,15 @@ export const listTopUps = async ({
   page,
   size = 20,
   status = "all",
+  dateFrom,
+  dateTo,
 }: {
   mode?: "all" | "pagination";
   page: number;
   size?: number;
   status?: string;
+  dateFrom?: string;
+  dateTo?: string;
 }) => {
   try {
     const fetchResponse = await fetch(
@@ -22,6 +26,8 @@ export const listTopUps = async ({
         page,
         size,
         status,
+        dateFrom,
+        dateTo,
       }),
       {
         headers: {

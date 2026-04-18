@@ -6,6 +6,8 @@ type Props = {
   searchParams: Promise<{
     page?: string;
     status?: string;
+    dateFrom?: string;
+    dateTo?: string;
   }>;
 };
 
@@ -19,11 +21,12 @@ const TopUpPage = async ({ searchParams: rawSearchParams }: Props) => {
   } = await listTopUps({
     page,
     status: searchParams.status,
+    dateFrom: searchParams.dateFrom,
+    dateTo: searchParams.dateTo,
   });
   if (error) {
     throw new Error(error);
   }
-  console.log({ topUps, total });
   return (
     <div className="flex w-full flex-col justify-center p-4 gap-y-4">
       <div className="flex w-full items-center justify-between">

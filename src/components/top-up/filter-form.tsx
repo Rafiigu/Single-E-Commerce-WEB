@@ -11,10 +11,13 @@ import {
 } from "@/components/ui/select";
 import { Button } from "../ui/button";
 import { SearchIcon } from "lucide-react";
+import { DatePickerWithRange } from "../shared/calendar/date-picker";
 
 type Props = {
   appliedFilters: {
     status?: string;
+    dateFrom?: string;
+    dateTo?: string;
   };
 };
 
@@ -22,9 +25,12 @@ export const TopUpFilterForm = ({ appliedFilters }: Props) => {
   const router = useRouter();
   const [filter, setFilter] = useState({
     status: appliedFilters.status || "all",
+    dateFrom: appliedFilters.dateFrom || "",
+    dateTo: appliedFilters.dateTo || "",
   });
 
-  console.log("test", appliedFilters);
+  console.log("dateFrom", appliedFilters.dateFrom);
+  console.log("dateTo", appliedFilters.dateTo);
 
   return (
     <form
@@ -60,14 +66,39 @@ export const TopUpFilterForm = ({ appliedFilters }: Props) => {
           <SelectItem value="rejected">Rejected</SelectItem>
         </SelectContent>
       </Select>
+      <DatePickerWithRange
+        value={
+          filter.dateFrom && filter.dateTo
+            ? { from: new Date(filter.dateFrom), to: new Date(filter.dateTo) }
+            : undefined
+        }
+        onChange={(range) => {
+          setFilter((st) => ({
+            ...st,
+            dateFrom: range?.from ? range.from.toISOString() : "",
+            dateTo: range?.to
+              ? new Date(
+                  range.to.getFullYear(),
+                  range.to.getMonth(),
+                  range.to.getDate(),
+                  23,
+                  59,
+                  59,
+                  999,
+                ).toISOString()
+              : "",
+          }));
+        }}
+      />
       <Button className="size-9">
         <SearchIcon />
       </Button>
-      {appliedFilters.status && appliedFilters.status !== "all" ? (
+      {(appliedFilters.status && appliedFilters.status !== "all") ||
+      (appliedFilters.dateFrom && appliedFilters.dateTo) ? (
         <Button
           variant="outline"
           onClick={() => {
-            setFilter({ status: "all" });
+            setFilter({ status: "all", dateFrom: "", dateTo: "" });
             router.push(`top-up`);
           }}
         >
