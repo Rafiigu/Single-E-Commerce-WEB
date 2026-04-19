@@ -15,7 +15,8 @@ import {
 } from "@/components/ui/popover";
 
 export function DatePickerWithRange({
-  value, onChange,
+  value,
+  onChange,
 }: {
   value?: DateRange;
   onChange?: (range: DateRange | undefined) => void;

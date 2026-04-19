@@ -9,16 +9,17 @@ export const listTopUps = async ({
   page,
   size = 20,
   status = "all",
-  dateFrom,
-  dateTo,
+  startDate,
+  endDate,
 }: {
   mode?: "all" | "pagination";
   page: number;
   size?: number;
   status?: string;
-  dateFrom?: string;
-  dateTo?: string;
+  startDate?: string;
+  endDate?: string;
 }) => {
+  console.log("listTopUps called with", startDate, endDate);
   try {
     const fetchResponse = await fetch(
       constructEndpoint("top-up", {
@@ -26,8 +27,8 @@ export const listTopUps = async ({
         page,
         size,
         status,
-        dateFrom,
-        dateTo,
+        startDate,
+        endDate,
       }),
       {
         headers: {
@@ -36,7 +37,7 @@ export const listTopUps = async ({
             (await cookies()).get("AUTH_TOKEN")?.value || ""
           }`,
         },
-      }
+      },
     );
 
     const response = await fetchResponse.json();

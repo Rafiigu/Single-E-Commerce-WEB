@@ -12,12 +12,13 @@ import {
 import { Button } from "../ui/button";
 import { SearchIcon } from "lucide-react";
 import { DatePickerWithRange } from "../shared/calendar/date-picker";
+import { endOfDay, startOfDay } from "date-fns";
 
 type Props = {
   appliedFilters: {
     status?: string;
-    dateFrom?: string;
-    dateTo?: string;
+    startDate?: string;
+    endDate?: string;
   };
 };
 
@@ -25,12 +26,9 @@ export const TopUpFilterForm = ({ appliedFilters }: Props) => {
   const router = useRouter();
   const [filter, setFilter] = useState({
     status: appliedFilters.status || "all",
-    dateFrom: appliedFilters.dateFrom || "",
-    dateTo: appliedFilters.dateTo || "",
+    startDate: appliedFilters.startDate || "",
+    endDate: appliedFilters.endDate || "",
   });
-
-  console.log("dateFrom", appliedFilters.dateFrom);
-  console.log("dateTo", appliedFilters.dateTo);
 
   return (
     <form
@@ -68,37 +66,28 @@ export const TopUpFilterForm = ({ appliedFilters }: Props) => {
       </Select>
       <DatePickerWithRange
         value={
-          filter.dateFrom && filter.dateTo
-            ? { from: new Date(filter.dateFrom), to: new Date(filter.dateTo) }
+          filter.startDate && filter.endDate
+            ? { from: new Date(filter.startDate), to: new Date(filter.endDate) }
             : undefined
         }
         onChange={(range) => {
-          setFilter((st) => ({
-            ...st,
-            dateFrom: range?.from ? range.from.toISOString() : "",
-            dateTo: range?.to
-              ? new Date(
-                  range.to.getFullYear(),
-                  range.to.getMonth(),
-                  range.to.getDate(),
-                  23,
-                  59,
-                  59,
-                  999,
-                ).toISOString()
-              : "",
-          }));
+          setFilter({
+            ...filter,
+            startDate:
+              startOfDay(range?.from ?? new Date()).toISOString() ?? "",
+            endDate: endOfDay(range?.to ?? new Date()).toISOString() ?? "",
+          });
         }}
       />
       <Button className="size-9">
         <SearchIcon />
       </Button>
       {(appliedFilters.status && appliedFilters.status !== "all") ||
-      (appliedFilters.dateFrom && appliedFilters.dateTo) ? (
+      (appliedFilters.startDate && appliedFilters.endDate) ? (
         <Button
           variant="outline"
           onClick={() => {
-            setFilter({ status: "all", dateFrom: "", dateTo: "" });
+            setFilter({ status: "all", startDate: "", endDate: "" });
             router.push(`top-up`);
           }}
         >

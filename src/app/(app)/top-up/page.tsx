@@ -1,19 +1,21 @@
 import { listTopUps } from "@/actions/top-up/list-top-up";
 import { TopUpFilterForm } from "@/components/top-up/filter-form";
 import { TopUpTable } from "@/components/top-up/table";
+import { endOfDay, startOfDay } from "date-fns";
 
 type Props = {
   searchParams: Promise<{
     page?: string;
     status?: string;
-    dateFrom?: string;
-    dateTo?: string;
+    startDate?: string;
+    endDate?: string;
   }>;
 };
 
 const TopUpPage = async ({ searchParams: rawSearchParams }: Props) => {
   const searchParams = await rawSearchParams;
   const page = Math.max(parseInt(searchParams.page || "1"), 1);
+  console.log("search params", searchParams);
   const {
     data: topUps,
     total,
@@ -21,8 +23,8 @@ const TopUpPage = async ({ searchParams: rawSearchParams }: Props) => {
   } = await listTopUps({
     page,
     status: searchParams.status,
-    dateFrom: searchParams.dateFrom,
-    dateTo: searchParams.dateTo,
+    startDate: searchParams.startDate ? searchParams.startDate : undefined,
+    endDate: searchParams.endDate ? searchParams.endDate : undefined,
   });
   if (error) {
     throw new Error(error);
