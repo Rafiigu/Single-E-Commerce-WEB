@@ -32,9 +32,9 @@ export function DatePickerWithRange({
           <Button
             variant="outline"
             id="date-picker-range"
-            className="justify-start px-2.5 font-normal"
+            className="justify-start border-neutral-400 h-[2.5rem] px-2.5 font-normal"
           >
-            <CalendarIcon />
+            <CalendarIcon className="text-neutral-700" />
             {value?.from ? (
               value.to ? (
                 <>
@@ -45,7 +45,7 @@ export function DatePickerWithRange({
                 format(value.from, "LLL dd, y")
               )
             ) : (
-              <span>Pilih tanggal</span>
+              <span className="text-neutral-700">Pilih tanggal</span>
             )}
           </Button>
         </PopoverTrigger>
