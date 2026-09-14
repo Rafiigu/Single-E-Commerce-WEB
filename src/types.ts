@@ -72,3 +72,19 @@ export type PaymentAccount = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type Transaction = {
+  id: string;
+  user: Pick<UserAccount, "id" | "name">;
+  total: number;
+  status: string;
+  receiverName: string;
+  receiverAddress: string;
+  receiverPhoneNumber: string;
+  logisticVendorName?: string; //Nanti ganti dengan Pick<LogisticVendor, "id" | "name">;
+  cancellationReason?: string;
+  deliveredAt?: string;
+  processedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+};

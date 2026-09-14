@@ -95,6 +95,18 @@ const groups = [
       },
     ],
   },
+  {
+    title: "Transaksi",
+    accesses: ["superadmin", "admin"],
+    items: [
+      {
+        title: "Manajemen Transaksi",
+        url: "/transaction",
+        icon: CircleDollarSign,
+        accesses: ["superadmin", "admin"],
+      },
+    ],
+  },
 ];
 
 export function AppSidebar() {
